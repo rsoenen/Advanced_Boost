@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour {
 	private int turboElement = 0;
 	private const int maxTurboElement=100;
 
+	void Start(){
+		GameGUI.maxTurboElement = (int)maxTurboElement;
+	}
 	void FixedUpdate(){
 
 		//on capte les input "avancer" et "tourner"
@@ -39,6 +42,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKey ("space")&&turboElement>0) {
 			turboElement--;
 			forwardMove=forwardMove+2;
+			GameGUI.turboElement = (int)turboElement;
 		}
 
 		//on avance selon la quantité de mouvement à effectuer
@@ -56,14 +60,14 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (other.CompareTag ("Feu")) {
 			if (elements=="Feu"&&maxTurboElement>turboElement){
-				turboElement=+2;
+				turboElement+=2;
 			}
 			if (elements=="Eau"&&0<turboElement){
 				turboElement--;
 			}
 		} else if (other.CompareTag ("Eau")) {
 			if (elements=="Eau"&&maxTurboElement>turboElement){
-				turboElement=+2;
+				turboElement+=2;
 			}
 			if (elements=="Feu"&&0<turboElement){
 				turboElement--;
@@ -73,15 +77,16 @@ public class PlayerController : MonoBehaviour {
 				turboElement++;
 			}
 			if (elements=="Lumiere"&&maxTurboElement>turboElement){
-				turboElement=+2;
+				turboElement+=2;
 			}
 		} else if(other.CompareTag ("Tenebre")){
 			if (elements=="Eau"&&maxTurboElement>turboElement){
 				turboElement++;
 			}
 			if (elements=="Tenebre"&&maxTurboElement>turboElement){
-				turboElement=+2;
+				turboElement+=2;
 			}
 		} 
+		GameGUI.turboElement = (int)turboElement;
 	}
 }
