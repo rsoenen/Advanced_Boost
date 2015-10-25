@@ -13,6 +13,12 @@ public class PlayerController : MonoBehaviour {
 	public float turnRate = 3;
 	public Boundary boundary;
 
+
+	//VARIABLE TURBO ELEMENTS MC
+	public string elements;
+	private int turboElement = 0;
+	private const int maxTurboElement=100;
+
 	void FixedUpdate(){
 
 		//on capte les input "avancer" et "tourner"
@@ -28,6 +34,13 @@ public class PlayerController : MonoBehaviour {
 			transform.Rotate(0,-turnForce,0);
 		}
 
+
+		//On ajoute le turbo élementaire si le joueur appuie sur espace
+		if (Input.GetKey ("space")&&turboElement>0) {
+			turboElement--;
+			forwardMove=forwardMove+2;
+		}
+
 		//on avance selon la quantité de mouvement à effectuer
 		transform.position += transform.forward * forwardMove * Time.deltaTime;
 
@@ -37,10 +50,38 @@ public class PlayerController : MonoBehaviour {
 			0.0f,
 			Mathf.Clamp(GetComponent<Rigidbody>().position.z,boundary.zMin,boundary.zMax)
 			);
+	}
 
-
-
-
-
+	//GESTION RECHARGEMENT TURBO ELEMENT
+	void OnTriggerStay(Collider other) {
+		if (other.CompareTag ("Feu")) {
+			if (elements=="Feu"&&maxTurboElement>turboElement){
+				turboElement=+2;
+			}
+			if (elements=="Eau"&&0<turboElement){
+				turboElement--;
+			}
+		} else if (other.CompareTag ("Eau")) {
+			if (elements=="Eau"&&maxTurboElement>turboElement){
+				turboElement=+2;
+			}
+			if (elements=="Feu"&&0<turboElement){
+				turboElement--;
+			}
+		} else if (other.CompareTag ("Lumiere")) {
+			if (elements=="Feu"&&maxTurboElement>turboElement){
+				turboElement++;
+			}
+			if (elements=="Lumiere"&&maxTurboElement>turboElement){
+				turboElement=+2;
+			}
+		} else if(other.CompareTag ("Tenebre")){
+			if (elements=="Eau"&&maxTurboElement>turboElement){
+				turboElement++;
+			}
+			if (elements=="Tenebre"&&maxTurboElement>turboElement){
+				turboElement=+2;
+			}
+		} 
 	}
 }
