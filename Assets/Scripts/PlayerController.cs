@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Boundary{
@@ -21,6 +22,8 @@ public class PlayerController : MonoBehaviour {
 
 	void Start(){
 		GameGUI.maxTurboElement = (int)maxTurboElement;
+
+        secondWithoutCollision = 0;
 	}
 	void FixedUpdate(){
 
@@ -48,12 +51,14 @@ public class PlayerController : MonoBehaviour {
 		//on avance selon la quantité de mouvement à effectuer
 		transform.position += transform.forward * forwardMove * Time.deltaTime;
 
-		//on met des bordures pour éviter au vaisseau de sortir du background
+		/*//on met des bordures pour éviter au vaisseau de sortir du background
 		GetComponent<Rigidbody>().position = new Vector3(
 			Mathf.Clamp(GetComponent<Rigidbody>().position.x,boundary.xMin,boundary.xMax),
 			0.0f,
 			Mathf.Clamp(GetComponent<Rigidbody>().position.z,boundary.zMin,boundary.zMax)
-			);
+			);*/
+
+        UpdateCollisionTime();
 	}
 
 	//GESTION RECHARGEMENT TURBO ELEMENT
@@ -89,4 +94,61 @@ public class PlayerController : MonoBehaviour {
 		} 
 		GameGUI.turboElement = (int)turboElement;
 	}
+
+    // Gestion des collisions
+    public Text collisionText;
+    public float ptByKm;
+    private float secondWithoutCollision;
+
+    void OnCollisionEnter(Collision myCollisionInfo)
+    {
+        /*if (myCollisionInfo.gameObject.CompareTag("Wall"))
+        {
+            secondWithoutCollision = 0;
+        }*/
+    }
+    void UpdateCollisionTime()
+    {
+        secondWithoutCollision += Time.deltaTime;
+        float distance = secondWithoutCollision * speed;
+        int value = (int)(distance * ptByKm / 1000);
+
+        SetCollisionText(value, Level(value));
+    }
+
+    void SetCollisionText(int value, int level)
+    {
+        collisionText.text = "Distance (in m) since last collision : " + value.ToString();
+    }
+
+    int Level(int val)
+    {
+        if (val < 0)
+            return -1;
+        else if (val >= 0 && val < 100)
+            return 0;
+        else if (val >= 100 && val < 300)
+            return 1;
+        else if (val >= 300 && val < 700)
+            return 2;
+        else if (val >= 700)
+            return 3;
+        else
+            return -1;
+    }
+    int Boost(int level)
+    {
+        switch (level)
+        {
+            case 1:
+                return 5;
+            case 2:
+                return 15;
+            case 3:
+                return 30;
+            default:
+                return 0;
+        }
+    }
+
 }
