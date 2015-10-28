@@ -10,9 +10,12 @@ public class Boundary{
 
 public class PlayerController : MonoBehaviour {
 
-	public float speed = 3;
+	public float acceleration = 3;
+    public float maxSpeed = 5;
 	public float turnRate = 3;
 	public Boundary boundary;
+
+    private float speed;
 
 
 	//VARIABLE TURBO ELEMENTS MC
@@ -21,14 +24,16 @@ public class PlayerController : MonoBehaviour {
 	private const int maxTurboElement=100;
 
 	void Start(){
+        acceleration *= 100;
+
 		GameGUI.maxTurboElement = (int)maxTurboElement;
 
-        secondWithoutCollision = 0;
+        distance = 0;
 	}
 	void FixedUpdate(){
 
 		//on capte les input "avancer" et "tourner"
-		float forwardMove = Input.GetAxis("Vertical") * speed;
+		float forwardMove = Input.GetAxis("Vertical");
 		float turnForce = Input.GetAxis("Horizontal") * turnRate;
 
 		//si le joueur va vers l'avant le sens de rotation est standard
@@ -48,15 +53,26 @@ public class PlayerController : MonoBehaviour {
 			GameGUI.turboElement = (int)turboElement;
 		}
 
+        /*  CODE THIBAUT */
 		//on avance selon la quantité de mouvement à effectuer
-		transform.position += transform.forward * forwardMove * Time.deltaTime;
+		//transform.position += transform.forward * forwardMove * Time.deltaTime;
 
-		/*//on met des bordures pour éviter au vaisseau de sortir du background
+		// on met des bordures pour éviter au vaisseau de sortir du background 
+        /*
 		GetComponent<Rigidbody>().position = new Vector3(
 			Mathf.Clamp(GetComponent<Rigidbody>().position.x,boundary.xMin,boundary.xMax),
 			0.0f,
 			Mathf.Clamp(GetComponent<Rigidbody>().position.z,boundary.zMin,boundary.zMax)
-			);*/
+			);
+        */
+
+        /*  CODE QUENTIN */
+        speed = GetComponent<Rigidbody>().velocity.magnitude;
+        if (speed < maxSpeed)
+        {
+            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration; // Le -1 sert a inverser le sens (bug ?)
+            GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
+        }
 
         UpdateCollisionTime();
 	}
@@ -98,19 +114,18 @@ public class PlayerController : MonoBehaviour {
     // Gestion des collisions
     public Text collisionText;
     public float ptByKm;
-    private float secondWithoutCollision;
+    private float distance;
 
     void OnCollisionEnter(Collision myCollisionInfo)
     {
-        /*if (myCollisionInfo.gameObject.CompareTag("Wall"))
-        {
-            secondWithoutCollision = 0;
-        }*/
+        distance = 0;
     }
+
     void UpdateCollisionTime()
     {
-        secondWithoutCollision += Time.deltaTime;
-        float distance = secondWithoutCollision * speed;
+        float dist = Time.deltaTime * speed;
+
+        distance += dist;
         int value = (int)(distance * ptByKm / 1000);
 
         SetCollisionText(value, Level(value));
