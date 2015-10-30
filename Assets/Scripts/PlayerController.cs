@@ -24,8 +24,6 @@ public class PlayerController : MonoBehaviour {
 	private const int maxTurboElement=100;
 
 	void Start(){
-        acceleration *= 100;
-
 		GameGUI.maxTurboElement = (int)maxTurboElement;
 
         distance = 0;
@@ -70,7 +68,7 @@ public class PlayerController : MonoBehaviour {
         speed = GetComponent<Rigidbody>().velocity.magnitude;
         if (speed < maxSpeed)
         {
-            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration; // Le -1 sert a inverser le sens (bug ?)
+            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 100;
             GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
         }
 
