@@ -72,6 +72,10 @@ public class StartOptions : MonoBehaviour {
 
 		//Hide the main menu UI element
 		showPanels.HideMenu ();
+		showPanels.HideMenuSolo ();
+		showPanels.HideMenuChoixCircuit ();
+		showPanels.HideMenuWithCoopOrNot ();
+
 
 		//Load the selected scene, by scene index number in build settings
 		Application.LoadLevel (sceneToStart);
