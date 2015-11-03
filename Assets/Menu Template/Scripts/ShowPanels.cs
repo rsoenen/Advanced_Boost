@@ -8,6 +8,8 @@ public class ShowPanels : MonoBehaviour {
 	public GameObject menuPanel;							//Store a reference to the Game Object MenuPanel 
 	public GameObject pausePanel;							//Store a reference to the Game Object PausePanel 
 	public GameObject menuSolo;
+	public GameObject menuChoixCircuit;
+	public GameObject menuWithCoopOrNot;
 
 	//Call this function to activate and display the Options panel during the main menu
 	public void ShowOptionsPanel()
@@ -34,17 +36,44 @@ public class ShowPanels : MonoBehaviour {
 	{
 		menuPanel.SetActive (false);
 	}
+	//Call this function to activate and display the main menu with Coop or not during the main menu
+	public void ShowMenuWithCoopOrNot()
+	{
+		menuWithCoopOrNot.SetActive (true);
+	}
+	
+	//Call this function to deactivate and hide the main menu with Coop or not during the main menu
+	public void HideMenuWithCoopOrNot()
+	{
+		menuWithCoopOrNot.SetActive (false);
+	}
 
 	//Call this function to activate and display the solo menu panel during the main menu
 	public void ShowMenuSolo()
 	{
 		menuSolo.SetActive (true);
+
 	}
 	
 	//Call this function to deactivate and hide the main menu solo during the main menu
 	public void HideMenuSolo()
 	{
 		menuSolo.SetActive (false);
+
+	}
+
+	//Call this function to activate and display the main menu choix circuit during the main menu
+	public void ShowMenuChoixCircuit()
+	{
+		menuChoixCircuit.SetActive (true);
+		
+	}
+	
+	//Call this function to deactivate and hide the main menu choix circuit during the main menu
+	public void HideMenuChoixCircuit()
+	{
+		menuChoixCircuit.SetActive (false);
+		
 	}
 	
 	//Call this function to activate and display the Pause panel during game play
