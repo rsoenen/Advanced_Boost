@@ -116,7 +116,11 @@ public class PlayerController : MonoBehaviour {
 
     void OnCollisionEnter(Collision myCollisionInfo)
     {
-        distance = 0;
+        if (myCollisionInfo.gameObject.CompareTag("Mur"))
+        {
+            distance = 0;
+        }
+        
     }
 
     void UpdateCollisionTime()
