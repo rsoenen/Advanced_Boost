@@ -37,6 +37,8 @@ public class StartOptions : MonoBehaviour {
 
 	public void StartButtonClicked()
 	{
+        
+
 		//If changeMusicOnStart is true, fade out volume of music group of AudioMixer by calling FadeDown function of PlayMusic, using length of fadeColorAnimationClip as time. 
 		//To change fade time, change length of animation "FadeToColor"
 		if (changeMusicOnStart) 
@@ -52,7 +54,7 @@ public class StartOptions : MonoBehaviour {
 			Invoke ("LoadDelayed", fadeColorAnimationClip.length * .5f);
 
 			//Set the trigger of Animator animColorFade to start transition to the FadeToOpaque state.
-			animColorFade.SetTrigger ("fade");
+            animColorFade.SetTrigger("fade");
 		} 
 
 		//If changeScenes is false, call StartGameInScene
@@ -76,9 +78,11 @@ public class StartOptions : MonoBehaviour {
 		showPanels.HideMenuChoixCircuit ();
 		showPanels.HideMenuWithCoopOrNot ();
 
-
 		//Load the selected scene, by scene index number in build settings
-		Application.LoadLevel (sceneToStart);
+        if (Application.loadedLevel != sceneToStart)
+        {
+            Application.LoadLevel(sceneToStart);
+        }
 	}
 
 

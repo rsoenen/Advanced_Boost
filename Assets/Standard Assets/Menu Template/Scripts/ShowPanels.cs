@@ -40,6 +40,10 @@ public class ShowPanels : MonoBehaviour {
 	//Call this function to activate and display the main menu panel during the main menu
 	public void ShowMenu()
 	{
+        HideMenuSolo();
+        HideMenuChoixCircuit();
+        HideMenuWithCoopOrNot();
+
 		menuPanel.SetActive (true);
 	}
 	//Call this function to deactivate and hide the main menu panel during the main menu
@@ -51,6 +55,10 @@ public class ShowPanels : MonoBehaviour {
 	//Call this function to activate and display the main menu with Coop or not during the main menu
 	public void ShowMenuWithCoopOrNot()
 	{
+        HideMenu();
+        HideMenuSolo();
+        HideMenuChoixCircuit();
+
 		menuWithCoopOrNot.SetActive (true);
 	}
 	//Call this function to deactivate and hide the main menu with Coop or not during the main menu
@@ -62,6 +70,10 @@ public class ShowPanels : MonoBehaviour {
 	//Call this function to activate and display the solo menu panel during the main menu
 	public void ShowMenuSolo()
 	{
+        HideMenu();
+        HideMenuChoixCircuit();
+        HideMenuWithCoopOrNot();
+
 		menuSolo.SetActive (true);
 	}
 	//Call this function to deactivate and hide the main menu solo during the main menu
@@ -73,6 +85,10 @@ public class ShowPanels : MonoBehaviour {
 	//Call this function to activate and display the main menu choix circuit during the main menu
 	public void ShowMenuChoixCircuit()
 	{
+        HideMenu();
+        HideMenuSolo();
+        HideMenuWithCoopOrNot();
+
 		menuChoixCircuit.SetActive (true);
 	}
 	//Call this function to deactivate and hide the main menu choix circuit during the main menu

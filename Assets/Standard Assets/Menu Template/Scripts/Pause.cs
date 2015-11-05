@@ -56,5 +56,19 @@ public class Pause : MonoBehaviour {
 		showPanels.HidePausePanel ();
 	}
 
+    public void Retry()
+    {
+        
+    }
 
+    public void Options()
+    {
+
+    }
+
+    public void ToMainMenu()
+    {
+        UnPause();
+        showPanels.ShowMenu();
+    }
 }
