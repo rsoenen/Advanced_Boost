@@ -69,6 +69,7 @@ public class Pause : MonoBehaviour {
     public void ToMainMenu()
     {
         UnPause();
-        showPanels.ShowMenu();
+        showPanels.ShowBackground();
+        showPanels.ShowMenuMain();
     }
 }

@@ -73,10 +73,11 @@ public class StartOptions : MonoBehaviour {
 		inMainMenu = false;
 
 		//Hide the main menu UI element
-		showPanels.HideMenu ();
+		showPanels.HideMenuMain ();
 		showPanels.HideMenuSolo ();
-		showPanels.HideMenuChoixCircuit ();
-		showPanels.HideMenuWithCoopOrNot ();
+		showPanels.HideMenuSelectCourse ();
+		showPanels.HideMenuMulti ();
+        showPanels.HideBackground ();
 
 		//Load the selected scene, by scene index number in build settings
         if (Application.loadedLevel != sceneToStart)
@@ -121,6 +122,7 @@ public class StartOptions : MonoBehaviour {
 	public void HideDelayed()
 	{
 		//Hide the main menu UI element
-		showPanels.HideMenu();
+		showPanels.HideMenuMain();
+        showPanels.HideBackground();
 	}
 }
