@@ -22,6 +22,6 @@ public class GameGUI : MonoBehaviour {
 		GUILayout.Space(3);
 
 		// BARRE POUR L'AFFICHAGE DU TURBO ELEMENT
-		GUI.DrawTexture(new Rect(10,10,barreTurboElement.width * turboElement / 100, barreTurboElement.height), barreTurboElement);
+		GUI.DrawTexture(new Rect(350,380,barreTurboElement.width * turboElement / 200, 20), barreTurboElement);
 	}
 }

@@ -4,11 +4,14 @@ using UnityEngine.UI;
 
 public class PlayerController : VehicleController{
 
+    #region Variables
     bool checkpoint1;
     bool checkpoint2;
     bool checkpoint3;
     public Text text;
     public Text TimeElapsed;
+    private GameObject BonneConduite;
+    private GameObject SpeedBar;
     double x11;
     double x12;
     double x21;
@@ -27,8 +30,11 @@ public class PlayerController : VehicleController{
     double fz2;
     int Lap;
     int min;
+    #endregion
     void Start()
     {
+        BonneConduite = GameObject.FindWithTag("BonneConduite");
+        SpeedBar=GameObject.FindWithTag("Vitesse");
         Lap = 1;
         GameGUI.maxTurboElement = (int)maxTurboElement;
         checkpoint1=false;
@@ -38,6 +44,7 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
+        #region AffichageTimeElapsed
         min = 0;
         float time = Time.time;
         while(time>60)
@@ -49,6 +56,8 @@ public class PlayerController : VehicleController{
             TimeElapsed.text = "Time: " + min.ToString() + ":" + time.ToString("00.000");
         else
             TimeElapsed.text = "Time: " + time.ToString("0:00.000");
+        #endregion
+        //if falling
         if (transform.position.y < 0)
             GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
         // Inputs
@@ -64,8 +73,13 @@ public class PlayerController : VehicleController{
 
         TurnVehicle();
         Forward();
-
         UpdateCollisionTime();
+        #region SpeedBar
+        float currentspeed = (speed / maxSpeed) * 160;
+        SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed/3, 20);
+        SpeedBar.GetComponent<RectTransform>().position = new Vector3(634 + (currentspeed / 6), 41, 0);
+        #endregion
+        #region Map1
         if (Application.loadedLevel == 1)
         {
             x11 = 47;
@@ -85,6 +99,8 @@ public class PlayerController : VehicleController{
             fz1 = -2;
             fz2 = 2;
         }
+        #endregion
+        #region Map2
         if (Application.loadedLevel == 2)
         {
             x11 = 39;
@@ -104,6 +120,8 @@ public class PlayerController : VehicleController{
             fz1 = -2;
             fz2 = 2;
         }
+        #endregion
+        #region Map3
         if (Application.loadedLevel == 3)
         {
             x11 = 18;
@@ -123,6 +141,8 @@ public class PlayerController : VehicleController{
             fz1 = -2;
             fz2 = 2;
         }
+        #endregion
+        #region Map4
         if (Application.loadedLevel == 4)
         {
             x11 = 41;
@@ -142,6 +162,8 @@ public class PlayerController : VehicleController{
             fz1 = -2;
             fz2 = 2;
         }
+        #endregion
+        #region Map5
         if (Application.loadedLevel == 5)
         {
             x11 = 21;
@@ -161,6 +183,8 @@ public class PlayerController : VehicleController{
             fz1 = 2;
             fz2 = 6;
         }
+        #endregion
+        #region GestionCheckpoint
         if ((transform.position.x > x11 && transform.position.x < x12) && (transform.position.z > z11 && transform.position.z < z12))
         {
             checkpoint1 = true;
@@ -190,7 +214,7 @@ public class PlayerController : VehicleController{
         {
             checkpoint3 = false;
         }
-
+        #endregion
     }
 
     // Texte Collision
@@ -198,6 +222,26 @@ public class PlayerController : VehicleController{
     void SetCollisionText(int value, int level)
     {
         collisionText.text = "Distance (in m) since last collision : " + value.ToString();
+        #region BonneConduite
+        if (value <= 160)
+        {
+            BonneConduite.GetComponent<Image>().color = new Color(1f, 1f, 0, 1f);
+            BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value, 20);
+            BonneConduite.GetComponent<RectTransform>().position = new Vector3(10 + (value / 2), 41, 0);
+        }
+        if (value > 160 && value <= 320)
+        {
+            BonneConduite.GetComponent<Image>().color = new Color(1f, 0.5f, 0, 1f);
+            BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 160, 20);
+            BonneConduite.GetComponent<RectTransform>().position = new Vector3(10 + ((value - 160) / 2), 41, 0);
+        }
+        if (value > 320 && value <= 480)
+        {
+            BonneConduite.GetComponent<Image>().color = new Color(1f, 0, 0, 1f);
+            BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 320, 20);
+            BonneConduite.GetComponent<RectTransform>().position = new Vector3(10 + ((value - 320) / 2), 41, 0);
+        }
+        #endregion
     }
     void UpdateCollisionTime()
     {
