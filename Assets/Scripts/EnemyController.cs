@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EnemyController : VehicleController{
 
-    NavMeshAgent agent;
+   /* NavMeshAgent agent;
 
     ArrayList listTarget;
     int index;
@@ -39,5 +39,5 @@ public class EnemyController : VehicleController{
         index++;
         if (index >= listTarget.Count)
             index = 0;
-    }
+    }*/
 }
