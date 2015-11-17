@@ -12,6 +12,7 @@ public class PlayerController : VehicleController{
     public Text TimeElapsed;
     private GameObject BonneConduite;
     private GameObject SpeedBar;
+    private GameObject TurboBar;
     double x11;
     double x12;
     double x21;
@@ -35,6 +36,7 @@ public class PlayerController : VehicleController{
     {
         BonneConduite = GameObject.FindWithTag("BonneConduite");
         SpeedBar=GameObject.FindWithTag("Vitesse");
+        TurboBar= GameObject.FindWithTag("Turbo");
         Lap = 1;
         GameGUI.maxTurboElement = (int)maxTurboElement;
         checkpoint1=false;
@@ -74,10 +76,12 @@ public class PlayerController : VehicleController{
         TurnVehicle();
         Forward();
         UpdateCollisionTime();
-        #region SpeedBar
+        #region GestionBarresHUD
         float currentspeed = (speed / maxSpeed) * 160;
+        SpeedBar.GetComponent<RectTransform>().anchoredPosition = new Vector3(-180+ (currentspeed / 6), 41, 0);
         SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed/3, 20);
-        SpeedBar.GetComponent<RectTransform>().position = new Vector3(634 + (currentspeed / 6), 41, 0);
+        TurboBar.GetComponent<RectTransform>().anchoredPosition = new Vector3(-95+ (turboElement), 41, 0);
+        TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement*2, 20);
         #endregion
         #region Map1
         if (Application.loadedLevel == 1)
@@ -227,19 +231,19 @@ public class PlayerController : VehicleController{
         {
             BonneConduite.GetComponent<Image>().color = new Color(1f, 1f, 0, 1f);
             BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value, 20);
-            BonneConduite.GetComponent<RectTransform>().position = new Vector3(10 + (value / 2), 41, 0);
+            BonneConduite.GetComponent<RectTransform>().anchoredPosition = new Vector3(16+ (value / 2), 41, 0);
         }
         if (value > 160 && value <= 320)
         {
             BonneConduite.GetComponent<Image>().color = new Color(1f, 0.5f, 0, 1f);
             BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 160, 20);
-            BonneConduite.GetComponent<RectTransform>().position = new Vector3(10 + ((value - 160) / 2), 41, 0);
+            BonneConduite.GetComponent<RectTransform>().anchoredPosition = new Vector3(16 + ((value - 160) / 2), 41, 0);
         }
         if (value > 320 && value <= 480)
         {
             BonneConduite.GetComponent<Image>().color = new Color(1f, 0, 0, 1f);
             BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 320, 20);
-            BonneConduite.GetComponent<RectTransform>().position = new Vector3(10 + ((value - 320) / 2), 41, 0);
+            BonneConduite.GetComponent<RectTransform>().anchoredPosition = new Vector3(16+ ((value - 320) / 2), 41, 0);
         }
         #endregion
     }
