@@ -4,7 +4,7 @@ using System.Collections;
 
 public class EnemyController : VehicleController{
 
-   /* NavMeshAgent agent;
+    NavMeshAgent agent;
 
     ArrayList listTarget;
     int index;
@@ -15,12 +15,14 @@ public class EnemyController : VehicleController{
         agent = GetComponent<NavMeshAgent>();
         listTarget = new ArrayList();
 
+       
 
+        
         // Définition des cibles successives
-        listTarget.Add(new Vector3(50, 0.05f, -17));
-        listTarget.Add(new Vector3(17, 0.05f, -71));
-        listTarget.Add(new Vector3(-32, 0.05f, -75));
-        listTarget.Add(new Vector3(-12, 0.05f, 0));
+        listTarget.Add(track.checkpoint1.transform.position);
+        listTarget.Add(track.checkpoint2.transform.position);
+        listTarget.Add(track.checkpoint3.transform.position);
+        listTarget.Add(track.finish.transform.position);
 
         moveToNextTarget();
 
@@ -40,5 +42,5 @@ public class EnemyController : VehicleController{
         index++;
         if (index >= listTarget.Count)
             index = 0;
-    }*/
+    }
 }
