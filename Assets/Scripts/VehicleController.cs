@@ -19,7 +19,7 @@ public class VehicleController : MonoBehaviour {
 
     // Gestion CheckPoint
     protected bool cp1, cp2, cp3;
-    protected int lap;
+    protected int lap=1;
     public Track track;
 
 
@@ -31,7 +31,6 @@ public class VehicleController : MonoBehaviour {
         cp1 = false;
         cp2 = false;
         cp3 = false;
-        lap = 1;
     }
 
     protected void TurnVehicle()
@@ -74,11 +73,13 @@ public class VehicleController : MonoBehaviour {
         }
         else if (other.gameObject == track.checkpoint2)
         {
-            cp2 = true;
+            if (cp1)
+                cp2 = true;
         }
         else if (other.gameObject == track.checkpoint3)
         {
-            cp3 = true;
+            if (cp1 && cp2)
+                cp3 = true;
         }
         else if (other.gameObject == track.finish)
         {
