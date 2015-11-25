@@ -51,9 +51,6 @@ public class PlayerController : VehicleController{
         {
             raceController = raceControllerObject.GetComponent<RaceController>();
         }
-        NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
-        NombreVaisseauxString = NombreVaisseaux.ToString();
-        Position.text = "Position: 1/" + NombreVaisseauxString;
         BonneConduite = GameObject.FindWithTag("BonneConduite");
         SpeedBar=GameObject.FindWithTag("Vitesse");
         TurboBar=GameObject.FindWithTag("Turbo");
@@ -64,6 +61,9 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
+
+        NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
+        NombreVaisseauxString = NombreVaisseaux.ToString();
         #region NavUpdate
         if (agent.remainingDistance < 5 && Time.time>Next+2)
         {
