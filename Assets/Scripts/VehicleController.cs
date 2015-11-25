@@ -18,7 +18,6 @@ public class VehicleController : MonoBehaviour {
     protected float forwardMove;
 
     // Gestion CheckPoint
-    protected bool cp1, cp2, cp3;
     protected int lap=1;
     public Track track;
 
@@ -28,9 +27,7 @@ public class VehicleController : MonoBehaviour {
     {
         distance = 0;
         turboElement = 0;
-        cp1 = false;
-        cp2 = false;
-        cp3 = false;
+        
     }
 
     protected void TurnVehicle()
@@ -66,32 +63,7 @@ public class VehicleController : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject == track.checkpoint1) {
-            cp1 = true;
-        }
-        else if (other.gameObject == track.checkpoint2)
-        {
-            if (cp1)
-                cp2 = true;
-        }
-        else if (other.gameObject == track.checkpoint3)
-        {
-            if (cp1 && cp2)
-                cp3 = true;
-        }
-        else if (other.gameObject == track.finish)
-        {
-            if (cp1 && cp2 && cp3)
-            {
-                lap++;
-            }
-            cp1 = false;
-            cp2 = false;
-            cp3 = false;
-        }
-    }
+    
 
     //GESTION RECHARGEMENT TURBO ELEMENT
     void OnTriggerStay(Collider other)
