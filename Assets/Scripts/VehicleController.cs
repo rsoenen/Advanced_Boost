@@ -20,16 +20,20 @@ public class VehicleController : MonoBehaviour {
     // Gestion CheckPoint
     protected int lap=1;
     public Track track;
-
+    protected float timeM;
 
 
     void Start()
     {
+        timeM = Time.time;
         distance = 0;
         turboElement = 0;
         
     }
-
+    public float GetTime()
+    {
+        return timeM;
+    }
     protected void TurnVehicle()
     {
         //si le joueur va vers l'avant le sens de rotation est standard

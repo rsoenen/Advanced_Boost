@@ -11,6 +11,7 @@ public class PlayerController : VehicleController{
     public Text lapText;
     public Text timeElapsedText;
     public Text Position;
+    public Text Info;
     private GameObject BonneConduite;
     private GameObject SpeedBar;
     private GameObject TurboBar;
@@ -23,7 +24,9 @@ public class PlayerController : VehicleController{
     private float Next;
     private int ActualPos;
     private NavMeshPath path;
+    float template;
     float DistanceHumain;
+    bool gettingtime;
     #endregion
 
     #region VariableNav
@@ -35,6 +38,8 @@ public class PlayerController : VehicleController{
 
     void Start()
     {
+        gettingtime = true;
+        Info.text = "Get Ready!";
         DistanceHumain = 0;
         elapsed = 0.0f;
         path = new NavMeshPath();
@@ -65,82 +70,107 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
-        elapsed += Time.deltaTime;
-        if (elapsed > 0.2f)
+        if (GetTime() + 1.5 < Time.time)
         {
-            elapsed -= 0.2f;
-            if(index>0)
-                NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index-1], NavMesh.AllAreas, path);
-            else
-                NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+            Info.text = "3!";
         }
-        NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
-        NombreVaisseauxString = NombreVaisseaux.ToString();
-        #region NavUpdate
-        if (agent.remainingDistance < 5 && Time.time>Next+2)
+        if (GetTime() + 2.5 < Time.time)
         {
-            Next = Time.time;
-            moveToNextTarget();
+            Info.text = "2!";
         }
-        DistanceHumain = PathLength(path);
-        #endregion
-        for (int i = 0; i < NombreVaisseaux-1; i++)
+        if (GetTime() + 3.5 < Time.time)
         {
-            
-            ActualPos = 1;
-            int check= raceController.NombreCheckpoint(i);
-            if (check > MyCheckPoint)
-                ActualPos++;
-            if (check ==MyCheckPoint)
+            Info.text = "1!";
+        }
+        if (GetTime() + 4.5 < Time.time)
+        {
+            Info.text = "Go!";
+        }
+        if (GetTime() + 5 < Time.time )
+        {
+            if (gettingtime)
             {
-                if (DistanceHumain > raceController.RemainingDistance(i))
-                    ActualPos++;
+                template = Time.time;
+                gettingtime=false;
             }
-                Position.text = "Position: " +  ActualPos + "/" + NombreVaisseauxString;
+            Info.text = "";
+            elapsed += Time.deltaTime;
+            if (elapsed > 0.2f)
+            {
+                elapsed -= 0.2f;
+                if (index > 0)
+                    NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
+                else
+                    NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+            }
+            NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
+            NombreVaisseauxString = NombreVaisseaux.ToString();
+            #region NavUpdate
+            if (agent.remainingDistance < 5 && Time.time > Next + 2)
+            {
+                Next = Time.time;
+                moveToNextTarget();
+            }
+            DistanceHumain = PathLength(path);
+            #endregion
+            for (int i = 0; i < NombreVaisseaux - 1; i++)
+            {
+
+                ActualPos = 1;
+                int check = raceController.NombreCheckpoint(i);
+                if (check > MyCheckPoint)
+                    ActualPos++;
+                if (check == MyCheckPoint)
+                {
+                    if (DistanceHumain > raceController.RemainingDistance(i))
+                        ActualPos++;
+                }
+                Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
+            }
+            #region AffichageTimeElapsed
+            minute = 0;
+            float time = Time.time-template;
+            while (time > 60)
+            {
+                minute++;
+                time = time - 60;
+            }
+            if (minute > 0)
+                timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
+            else
+                timeElapsedText.text = "Time: " + time.ToString("0:00.000");
+            #endregion
+            #region AffichageCompteurTour
+            lapText.text = "Lap : " + lap + "/3";
+            #endregion
+            //If Falling
+            if (transform.position.y < 0)
+                GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
+
+            // Inputs
+            forwardMove = Input.GetAxis("Vertical");
+            turnForce = Input.GetAxis("Horizontal") * turnRate;
+
+            // Turbo !!!!
+            if (Input.GetKey("space"))
+            {
+                UseTurbo();
+                GameGUI.turboElement = (int)turboElement;
+            }
+
+            TurnVehicle();
+            Forward();
+
+
+            #region GestionBarresHUD
+            UpdateCollisionTime();
+
+            float currentspeed = (speed / maxSpeed) * 160;
+            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / 3, 20);
+            TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 2, 20);
+
+            #endregion
         }
-        #region AffichageTimeElapsed
-        minute = 0;
-        float time = Time.time;
-        while(time>60)
-        {
-            minute++;
-            time = time - 60;
-        }
-        if(minute>0)
-            timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
-        else
-            timeElapsedText.text = "Time: " + time.ToString("0:00.000");
-        #endregion
-        #region AffichageCompteurTour
-        lapText.text = "Lap : " + lap + "/3";
-        #endregion
-        //If Falling
-        if (transform.position.y < 0)
-            GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
-
-        // Inputs
-        forwardMove = Input.GetAxis("Vertical");
-        turnForce = Input.GetAxis("Horizontal") * turnRate;
-
-        // Turbo !!!!
-        if (Input.GetKey("space"))
-        {
-            UseTurbo();
-            GameGUI.turboElement = (int)turboElement;
-        }
-
-        TurnVehicle();
-        Forward();
-        
-
-        #region GestionBarresHUD
-        UpdateCollisionTime();
-
-        float currentspeed = (speed / maxSpeed) * 160;
-        SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed/3, 20);
-        TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement*2, 20);
-
-        #endregion  
     }
 
     //Texte Collision

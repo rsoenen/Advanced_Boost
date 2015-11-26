@@ -11,6 +11,7 @@ public class EnemyController : VehicleController{
     int index;
     int Checkpoint;
     float DistanceIA;
+    bool activate = false;
     // Use this for initialization
     void Start ()
     {
@@ -30,7 +31,7 @@ public class EnemyController : VehicleController{
         listTarget.Add(track.checkpoint3.transform.position);
         listTarget.Add(track.finish.transform.position);
 
-        moveToNextTarget();
+        
 
     }
     public int NombreCheckPoint()
@@ -58,20 +59,31 @@ public class EnemyController : VehicleController{
     }
     // Update is called once per frame
     void Update () {
-        elapsed += Time.deltaTime;
-        if (elapsed > 0.2f)
+        if (GetTime() + 5 < Time.time )
         {
-            elapsed -= 0.2f;
-            if (index > 0)
-                NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
+            if (!activate)
+            {
+                moveToNextTarget();
+                activate = true;
+            }
             else
-                NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
-        }
-        DistanceIA = PathLength(path);
-        if (agent.remainingDistance < 5)
-        {
-            Checkpoint++;
-            moveToNextTarget();
+            {
+                elapsed += Time.deltaTime;
+                if (elapsed > 0.2f)
+                {
+                    elapsed -= 0.2f;
+                    if (index > 0)
+                        NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
+                    else
+                        NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+                }
+                DistanceIA = PathLength(path);
+                if (agent.remainingDistance < 5)
+                {
+                    Checkpoint++;
+                    moveToNextTarget();
+                }
+            }
         }
 	}
 
