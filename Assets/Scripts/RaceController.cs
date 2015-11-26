@@ -35,10 +35,10 @@ public class RaceController : MonoBehaviour {
 
         return MyAirships[range].GetComponent<EnemyController>().Remaining();
     }
-    public Vector3 Pos(int range)
+    public float RemainingDistance(int range)
     {
 
-        return MyAirships[range].GetComponent<EnemyController>().Position();
+        return MyAirships[range].GetComponent<EnemyController>().RemainingDis();
     }
     public Vector3 Actual(int range)
     {

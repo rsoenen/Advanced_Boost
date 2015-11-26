@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerController : VehicleController{
 
     #region Variables
+    private float elapsed = 0.0f;
     private int MyCheckPoint;
     public Text lapText;
     public Text timeElapsedText;
@@ -21,7 +22,8 @@ public class PlayerController : VehicleController{
     int minute;
     private float Next;
     private int ActualPos;
-
+    private NavMeshPath path;
+    float DistanceHumain;
     #endregion
 
     #region VariableNav
@@ -33,7 +35,9 @@ public class PlayerController : VehicleController{
 
     void Start()
     {
-
+        DistanceHumain = 0;
+        elapsed = 0.0f;
+        path = new NavMeshPath();
         #region InstanceNav
         index = 0;
         agent = GetComponent<NavMeshAgent>();
@@ -61,7 +65,15 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
-
+        elapsed += Time.deltaTime;
+        if (elapsed > 0.2f)
+        {
+            elapsed -= 0.2f;
+            if(index>0)
+                NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index-1], NavMesh.AllAreas, path);
+            else
+                NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+        }
         NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
         NombreVaisseauxString = NombreVaisseaux.ToString();
         #region NavUpdate
@@ -70,6 +82,7 @@ public class PlayerController : VehicleController{
             Next = Time.time;
             moveToNextTarget();
         }
+        DistanceHumain = PathLength(path);
         #endregion
         for (int i = 0; i < NombreVaisseaux-1; i++)
         {
@@ -80,33 +93,8 @@ public class PlayerController : VehicleController{
                 ActualPos++;
             if (check ==MyCheckPoint)
             {
-                if(agent.remainingDistance>999 || raceController.Distance(i)>999)
-                {
-                    float x1;
-                    float z1;
-                    if (index > 0)
-                    {
-                        x1 = Math.Abs(transform.position.x) - Math.Abs(((Vector3)listTarget[index - 1]).x);
-                        z1 = Math.Abs(transform.position.z) - Math.Abs(((Vector3)listTarget[index - 1]).z);
-                    }
-                    else
-                    {
-                        x1 = Math.Abs(transform.position.x) - Math.Abs(((Vector3)listTarget[3]).x);
-                        z1 = Math.Abs(transform.position.z) - Math.Abs(((Vector3)listTarget[3]).z);
-                    }
-                    float x2 = Math.Abs(raceController.Pos(i).x) - Math.Abs((raceController.Actual(i)).x);
-                    float z2 = Math.Abs(raceController.Pos(i).z) - Math.Abs((raceController.Actual(i)).z);
-
-                    if ((x1 * x1 + z1 * z1) > (x2 * x2 + z2 * z2))
-                    {
-                        ActualPos++;
-                    }
-                    
-                }
-                else if(agent.remainingDistance>raceController.Distance(i))
-                {
+                if (DistanceHumain > raceController.RemainingDistance(i))
                     ActualPos++;
-                }
             }
                 Position.text = "Position: " +  ActualPos + "/" + NombreVaisseauxString;
         }
@@ -225,5 +213,22 @@ public class PlayerController : VehicleController{
         index++;
         if (index >= listTarget.Count)
             index = 0;
+    }
+    float PathLength(NavMeshPath path)
+    {
+        if (path.corners.Length < 2)
+            return 0;
+
+        Vector3 previousCorner = path.corners[0];
+        float lengthSoFar = 0.0F;
+        int i = 1;
+        while (i < path.corners.Length)
+        {
+            Vector3 currentCorner = path.corners[i];
+            lengthSoFar += Vector3.Distance(previousCorner, currentCorner);
+            previousCorner = currentCorner;
+            i++;
+        }
+        return lengthSoFar;
     }
 }
