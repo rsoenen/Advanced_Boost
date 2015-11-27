@@ -25,7 +25,7 @@ public class PlayerController : VehicleController{
     private GameObject BonneConduite;
     private GameObject SpeedBar;
     private GameObject TurboBar;
-    private RaceController raceController;
+    private gameController gameController;
     private int NombreVaisseaux;
     private string NombreVaisseauxString;
     protected bool cp1, cp2, cp3;
@@ -68,10 +68,10 @@ public class PlayerController : VehicleController{
         #endregion
         ActualPos = 1;
         MyCheckPoint = 0;
-        GameObject raceControllerObject = GameObject.FindWithTag("RaceController");
-        if (raceControllerObject != null)
+        GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+        if (gameControllerObject != null)
         {
-            raceController = raceControllerObject.GetComponent<RaceController>();
+            gameController = gameControllerObject.GetComponent<gameController>();
         }
         BonneConduite = GameObject.FindWithTag("BonneConduite");
         SpeedBar=GameObject.FindWithTag("Vitesse");
@@ -83,216 +83,216 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
-
-        if (GetTime() + 1.5 < Time.time && gettingtime)
-        {
-            Info.text = "3!";
-        }
-
-        if (GetTime() + 2.5 < Time.time && gettingtime)
-        {
-            Info.text = "2!";
-        }
-        if (GetTime() + 3.5 < Time.time && gettingtime)
-        {
-            Info.text = "1!";
-        }
-        if (GetTime() + 4.5 < Time.time && gettingtime)
-        {
-            Info.text = "Go!";
-        }
-        if (GetTime() + 5 < Time.time)
-        {
-            if (lap == 1)
-                Info.text = "";
-            if (gettingtime)
+            if (GetTime() + 1.5 < Time.time && gettingtime)
             {
-                template = Time.time;
-                gettingtime = false;
+                Info.text = "3!";
             }
-            elapsed += Time.deltaTime;
-            elapsedPos += Time.deltaTime;
-            if (elapsed > 0.05f)
-            {
-                elapsed -= 0.05f;
-                if (index > 0)
-                    NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
-                else
-                    NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
 
+            if (GetTime() + 2.5 < Time.time && gettingtime)
+            {
+                Info.text = "2!";
             }
-            if (elapsedPos > 0.2f && possession)
+            if (GetTime() + 3.5 < Time.time && gettingtime)
             {
-                elapsedPos -= 0.2f;
-                NombreVaisseaux = (raceController.NombreVaisseau() + raceController.NombreVaisseauHumain());
-                NombreVaisseauxString = NombreVaisseaux.ToString();
-
-                ActualPos = 1;
-                for (int i = 0; i < raceController.NombreVaisseau(); i++)
+                Info.text = "1!";
+            }
+            if (GetTime() + 4.5 < Time.time && gettingtime)
+            {
+                Info.text = "Go!";
+            }
+            if (GetTime() + 5 < Time.time)
+            {
+                if (lap == 1)
+                    Info.text = "";
+                if (gettingtime)
                 {
-                    int check = raceController.NombreCheckpoint(i);
-                    if (check > MyCheckPoint)
-                        ActualPos++;
-                    else if (check == MyCheckPoint)
-                    {
-                        if (DistanceHumain > raceController.RemainingDistance(i))
-                            ActualPos++;
-                    }
+                    template = Time.time;
+                    gettingtime = false;
                 }
-                for (int i = 0; i < raceController.NombreVaisseauHumain(); i++)
+                elapsed += Time.deltaTime;
+                elapsedPos += Time.deltaTime;
+                if (elapsed > 0.05f)
                 {
-                    if (raceController.MyAirshipsHumain[i].tag != tag)
+                    elapsed -= 0.05f;
+                    if (index > 0)
+                        NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
+                    else
+                        NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+
+                }
+                if (elapsedPos > 0.2f && possession)
+                {
+                    elapsedPos -= 0.2f;
+                    NombreVaisseaux = (gameController.NombreVaisseau() + gameController.NombreVaisseauHumain());
+                    NombreVaisseauxString = NombreVaisseaux.ToString();
+
+                    ActualPos = 1;
+                    for (int i = 0; i < gameController.NombreVaisseau(); i++)
                     {
-                        int check = raceController.NombreCheckpointHumain(i);
+                        int check = gameController.NombreCheckpoint(i);
                         if (check > MyCheckPoint)
                             ActualPos++;
                         else if (check == MyCheckPoint)
                         {
-                            if (DistanceHumain > raceController.RemainingDistanceHumain(i))
+                            if (DistanceHumain > gameController.RemainingDistance(i))
                                 ActualPos++;
                         }
                     }
+                    for (int i = 0; i < gameController.NombreVaisseauHumain(); i++)
+                    {
+                        if (gameController.MyAirshipsHumain[i].tag != tag)
+                        {
+                            int check = gameController.NombreCheckpointHumain(i);
+                            if (check > MyCheckPoint)
+                                ActualPos++;
+                            else if (check == MyCheckPoint)
+                            {
+                                if (DistanceHumain > gameController.RemainingDistanceHumain(i))
+                                    ActualPos++;
+                            }
+                        }
+                    }
+                    Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
                 }
-                Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
-            }
-            #region NavUpdate
-            DistanceHumain = PathLength(path);
-            if (agent.remainingDistance < 5 && Time.time > Next + 1)
-            {
-                moveToNextTarget();
-                MyCheckPoint++;
-                Next = Time.time;
-            }
-            #endregion
-            #region AffichageTimeElapsed
-            minute = 0;
-            float time = Time.time - template;
-            while (time > 60)
-            {
-                minute++;
-                time = time - 60;
-            }
-            if (minute > 0)
-                timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
-            else
-                timeElapsedText.text = "Time: " + time.ToString("0:00.000");
-            #endregion
-            #region AffichageCompteurTour
-            lapText.text = "Lap : " + lap + "/3";
-            #endregion
-            //If Falling
-            if (transform.position.y < 0)
-                GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
-
-            if (possession)
-            {
-                // Inputs
-                forwardMove = Input.GetAxis("Vertical");
-                turnForce = Input.GetAxis("Horizontal") * turnRate;
-
-                // Turbo !!!!
-                if (Input.GetKey("space"))
+                #region NavUpdate
+                DistanceHumain = PathLength(path);
+                if (agent.remainingDistance < 5 && Time.time > Next + 1)
                 {
-                    turboElementActif = true;
-                    UseTurbo();
-                    GameGUI.turboElement = (int)turboElement;
+                    moveToNextTarget();
+                    MyCheckPoint++;
+                    Next = Time.time;
+                }
+                #endregion
+                #region AffichageTimeElapsed
+                minute = 0;
+                float time = Time.time - template;
+                while (time > 60)
+                {
+                    minute++;
+                    time = time - 60;
+                }
+                if (minute > 0)
+                    timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
+                else
+                    timeElapsedText.text = "Time: " + time.ToString("0:00.000");
+                #endregion
+                #region AffichageCompteurTour
+                lapText.text = "Lap : " + lap + "/3";
+                #endregion
+                //If Falling
+                if (transform.position.y < 0)
+                    GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
+
+                if (possession)
+                {
+                    // Inputs
+                    forwardMove = Input.GetAxis("Vertical");
+                    turnForce = Input.GetAxis("Horizontal") * turnRate;
+
+                    // Turbo !!!!
+                    if (Input.GetKey("space"))
+                    {
+                        turboElementActif = true;
+                        UseTurbo();
+                        GameGUI.turboElement = (int)turboElement;
+                    }
+                    else
+                    {
+                        turboElementActif = false;
+                    }
+
+                    TurnVehicle();
+                    Forward();
+
                 }
                 else
                 {
-                    turboElementActif = false;
+                    for (int i = 0; i < gameController.NombreVaisseau(); i++)
+                    {
+                        if (gameController.PosIA(i) == 1 && NombreVaisseaux > 0)
+                        {
+                            pos1 = "1) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 2 && NombreVaisseaux > 1)
+                        {
+                            pos2 = "2) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 3 && NombreVaisseaux > 2)
+                        {
+                            pos3 = "3) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 4 && NombreVaisseaux > 3)
+                        {
+                            pos4 = "4) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 5 && NombreVaisseaux > 4)
+                        {
+                            pos5 = "5) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 6 && NombreVaisseaux > 5)
+                        {
+                            pos6 = "6) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 7 && NombreVaisseaux > 6)
+                        {
+                            pos7 = "7) " + gameController.MyAirships[i].tag;
+                        }
+                        if (gameController.PosIA(i) == 8 && NombreVaisseaux > 7)
+                        {
+                            pos8 = "8) " + gameController.MyAirships[i].tag;
+                        }
+                    }
+                    for (int i = 0; i < gameController.NombreVaisseauHumain(); i++)
+                    {
+
+                        if (gameController.PosHumain(i) == 1 && NombreVaisseaux > 0)
+                        {
+                            pos1 = "1) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 2 && NombreVaisseaux > 1)
+                        {
+                            pos2 = "2) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 3 && NombreVaisseaux > 2)
+                        {
+                            pos3 = "3) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 4 && NombreVaisseaux > 3)
+                        {
+                            pos4 = "4) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 5 && NombreVaisseaux > 4)
+                        {
+                            pos5 = "5) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 6 && NombreVaisseaux > 5)
+                        {
+                            pos6 = "6) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 7 && NombreVaisseaux > 6)
+                        {
+                            pos7 = "7) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                        if (gameController.PosHumain(i) == 8 && NombreVaisseaux > 7)
+                        {
+                            pos8 = "8) " + gameController.MyAirshipsHumain[i].tag;
+                        }
+                    }
+                    Classement.text = "Classement Final:\n" + pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
+
+
+
                 }
+                #region GestionBarresHUD
+                UpdateCollisionTime();
 
-                TurnVehicle();
-                Forward();
+                float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
+                SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed * 10, 20);
+                TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 2, 20);
 
+                #endregion
             }
-            else
-            {
-                for (int i = 0; i < raceController.NombreVaisseau(); i++)
-                {
-                    if (raceController.PosIA(i) == 1 && NombreVaisseaux > 0)
-                    {
-                        pos1 = "1) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 2 && NombreVaisseaux > 1)
-                    {
-                        pos2 = "2) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 3 && NombreVaisseaux > 2)
-                    {
-                        pos3 = "3) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 4 && NombreVaisseaux > 3)
-                    {
-                        pos4 = "4) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 5 && NombreVaisseaux > 4)
-                    {
-                        pos5 = "5) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 6 && NombreVaisseaux > 5)
-                    {
-                        pos6 = "6) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 7 && NombreVaisseaux > 6)
-                    {
-                        pos7 = "7) " + raceController.MyAirships[i].tag;
-                    }
-                    if (raceController.PosIA(i) == 8 && NombreVaisseaux > 7)
-                    {
-                        pos8 = "8) " + raceController.MyAirships[i].tag;
-                    }
-                }
-                for (int i = 0; i < raceController.NombreVaisseauHumain(); i++)
-                {
-
-                    if (raceController.PosHumain(i) == 1 && NombreVaisseaux > 0)
-                    {
-                        pos1 = "1) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 2 && NombreVaisseaux > 1)
-                    {
-                        pos2 = "2) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 3 && NombreVaisseaux > 2)
-                    {
-                        pos3 = "3) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 4 && NombreVaisseaux > 3)
-                    {
-                        pos4 = "4) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 5 && NombreVaisseaux > 4)
-                    {
-                        pos5 = "5) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 6 && NombreVaisseaux > 5)
-                    {
-                        pos6 = "6) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 7 && NombreVaisseaux > 6)
-                    {
-                        pos7 = "7) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                    if (raceController.PosHumain(i) == 8 && NombreVaisseaux > 7)
-                    {
-                        pos8 = "8) " + raceController.MyAirshipsHumain[i].tag;
-                    }
-                }
-                Classement.text = "Classement Final:\n" + pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
-
-
-
-           }
-            #region GestionBarresHUD
-            UpdateCollisionTime();
-
-            float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
-            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed * 10, 20);
-            TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 2, 20);
-
-            #endregion
-        }
+      
     }
 
     //Texte Collision
