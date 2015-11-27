@@ -80,8 +80,8 @@ public class EnemyController : VehicleController{
                 DistanceIA = PathLength(path);
                 if (agent.remainingDistance < 5)
                 {
-                    Checkpoint++;
                     moveToNextTarget();
+                    Checkpoint++;
                 }
             }
         }
