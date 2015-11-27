@@ -25,6 +25,8 @@ public class gameController : MonoBehaviour {
         Text tour = GameObject.Find("Tour").GetComponent<Text>();
         Text time = GameObject.Find("Time").GetComponent<Text>();
         Text info = GameObject.Find("Info").GetComponent<Text>();
+        Text classement = GameObject.Find("Classement").GetComponent<Text>();
+
 
         for (int i = 1; i < nombreVaisseau - nombreIA + 1;i++){
             int numberSpawn = nombreIA + i;
@@ -35,6 +37,7 @@ public class gameController : MonoBehaviour {
             player.GetComponent<PlayerController>().timeElapsedText = time;
             player.GetComponent<PlayerController>().Position = position;
             player.GetComponent<PlayerController>().Info = info;
+            player.GetComponent<PlayerController>().Classement = classement;
             player.tag = "Player" + i;
         }
 
