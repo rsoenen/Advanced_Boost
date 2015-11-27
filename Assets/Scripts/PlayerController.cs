@@ -27,6 +27,7 @@ public class PlayerController : VehicleController{
     float template;
     float DistanceHumain;
     bool gettingtime;
+    bool possession;
     #endregion
 
     #region VariableNav
@@ -38,6 +39,7 @@ public class PlayerController : VehicleController{
 
     void Start()
     {
+        possession = true;
         gettingtime = true;
         Info.text = "Get Ready!";
         DistanceHumain = 0;
@@ -70,30 +72,32 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
-        if (GetTime() + 1.5 < Time.time)
+        if (GetTime() + 1.5 < Time.time && gettingtime)
         {
             Info.text = "3!";
         }
-        if (GetTime() + 2.5 < Time.time)
+
+        if (GetTime() + 2.5 < Time.time && gettingtime)
         {
             Info.text = "2!";
         }
-        if (GetTime() + 3.5 < Time.time)
+        if (GetTime() + 3.5 < Time.time && gettingtime)
         {
             Info.text = "1!";
         }
-        if (GetTime() + 4.5 < Time.time)
+        if (GetTime() + 4.5 < Time.time && gettingtime)
         {
             Info.text = "Go!";
         }
-        if (GetTime() + 5 < Time.time )
+        if (GetTime() + 5 < Time.time)
         {
+            if(lap==1)
+                Info.text = "";
             if (gettingtime)
             {
                 template = Time.time;
-                gettingtime=false;
+                gettingtime = false;
             }
-            Info.text = "";
             elapsed += Time.deltaTime;
             if (elapsed > 0.2f)
             {
@@ -105,14 +109,6 @@ public class PlayerController : VehicleController{
             }
             NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
             NombreVaisseauxString = NombreVaisseaux.ToString();
-            #region NavUpdate
-            if (agent.remainingDistance < 5 && Time.time > Next + 2)
-            {
-                Next = Time.time;
-                moveToNextTarget();
-            }
-            DistanceHumain = PathLength(path);
-            #endregion
             for (int i = 0; i < NombreVaisseaux - 1; i++)
             {
 
@@ -120,16 +116,26 @@ public class PlayerController : VehicleController{
                 int check = raceController.NombreCheckpoint(i);
                 if (check > MyCheckPoint)
                     ActualPos++;
-                if (check == MyCheckPoint)
+                else if (check == MyCheckPoint)
                 {
                     if (DistanceHumain > raceController.RemainingDistance(i))
                         ActualPos++;
                 }
-                Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
             }
+            Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
+
+            #region NavUpdate
+            DistanceHumain = PathLength(path);
+            if (agent.remainingDistance < 5 && Time.time > Next + 1)
+            {
+                MyCheckPoint++;
+                Next = Time.time;
+                moveToNextTarget();
+            }
+            #endregion
             #region AffichageTimeElapsed
             minute = 0;
-            float time = Time.time-template;
+            float time = Time.time - template;
             while (time > 60)
             {
                 minute++;
@@ -147,30 +153,33 @@ public class PlayerController : VehicleController{
             if (transform.position.y < 0)
                 GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
 
-            // Inputs
-            forwardMove = Input.GetAxis("Vertical");
-            turnForce = Input.GetAxis("Horizontal") * turnRate;
-
-            // Turbo !!!!
-            if (Input.GetKey("space"))
+            if (possession)
             {
-                turboElementActif = true;
-                UseTurbo();
-                GameGUI.turboElement = (int)turboElement;
+                // Inputs
+                forwardMove = Input.GetAxis("Vertical");
+                turnForce = Input.GetAxis("Horizontal") * turnRate;
+
+                // Turbo !!!!
+                if (Input.GetKey("space"))
+                {
+                    turboElementActif = true;
+                    UseTurbo();
+                    GameGUI.turboElement = (int)turboElement;
+                }
+                else
+                {
+                    turboElementActif = false;
+                }
+
+                TurnVehicle();
+                Forward();
+
             }
-            else{
-                turboElementActif = false;
-            }
-
-            TurnVehicle();
-            Forward();
-
-
             #region GestionBarresHUD
             UpdateCollisionTime();
 
             float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
-            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed*10 , 20);
+            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed * 10, 20);
             TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 2, 20);
 
             #endregion
@@ -208,32 +217,36 @@ public class PlayerController : VehicleController{
     {
         if (other.gameObject == track.checkpoint1)
         {
-            if (!cp1)
-                MyCheckPoint++;
             cp1 = true;
         }
         else if (other.gameObject == track.checkpoint2)
         {
-            if (cp1 && !cp2)
+            if (cp1)
             {
                 cp2 = true;
-                MyCheckPoint++;
             }
         }
         else if (other.gameObject == track.checkpoint3)
         {
-            if (cp1 && cp2 && !cp3)
+            if (cp1 && cp2)
             {
                 cp3 = true;
-                MyCheckPoint++;
             }
         }
         else if (other.gameObject == track.finish)
         {
             if (cp1 && cp2 && cp3)
             {
-                lap++;
-                MyCheckPoint++;
+                if (lap < 3)
+                {
+                    lap++;
+                }
+                else
+                {
+                    agent.speed = 10;
+                    possession = false;
+                    Info.text = "Finish! You are : " + ActualPos + "/"+NombreVaisseauxString;
+                }
             }
             cp1 = false;
             cp2 = false;
