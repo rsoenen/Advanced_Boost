@@ -15,6 +15,7 @@ public class VehicleController : MonoBehaviour {
     protected int turboElement;
     protected const int maxTurboElement = 100;
     protected int valeurBoost;
+    float currentTime = 0;
 
     protected float turnForce;
     protected float forwardMove;
@@ -59,7 +60,7 @@ public class VehicleController : MonoBehaviour {
             if (speed < maxSpeed)
             {
                 Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 9;
-                GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
+                //GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
             }            
         }
     }
@@ -71,9 +72,13 @@ public class VehicleController : MonoBehaviour {
         if (turboElementActif){
             valeurBoost = 2;
         }
-        if (speed < maxSpeed + valeurBoost)
+        //float deltaTime=Time.time-currentTime;
+        
+        //currentTime = Time.time;
+        if (speed < (maxSpeed + valeurBoost))
         {
-            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 9;
+            //Debug.Log("boost en cours");
+            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 100;
             GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
         }
     }
