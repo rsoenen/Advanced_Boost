@@ -12,9 +12,14 @@ public class EnemyController : VehicleController{
     int Checkpoint;
     float DistanceIA;
     bool activate = false;
+    private float elapsedPos = 0.0f;
+    private int ActualPos;
+    private RaceController raceController;
     // Use this for initialization
     void Start ()
     {
+        elapsedPos = 0.0f;
+        ActualPos = 1;
         elapsed = 0.0f;
         path = new NavMeshPath();
         index = 0;
@@ -24,7 +29,11 @@ public class EnemyController : VehicleController{
 
         DistanceIA = 0;
 
-
+        GameObject raceControllerObject = GameObject.FindWithTag("RaceController");
+        if (raceControllerObject != null)
+        {
+            raceController = raceControllerObject.GetComponent<RaceController>();
+        }
         // Définition des cibles successives
         listTarget.Add(track.checkpoint1.transform.position);
         listTarget.Add(track.checkpoint2.transform.position);
@@ -33,6 +42,10 @@ public class EnemyController : VehicleController{
 
         
 
+    }
+    public int Position()
+    {
+        return ActualPos;
     }
     public int NombreCheckPoint()
     {
@@ -76,12 +89,43 @@ public class EnemyController : VehicleController{
                         NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
                     else
                         NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
-               }
+                }
                 DistanceIA = PathLength(path);
                 if (agent.remainingDistance < 5)
                 {
                     moveToNextTarget();
                     Checkpoint++;
+                }
+                elapsedPos += Time.deltaTime;
+                if (elapsedPos > 0.2f)
+                {
+                    elapsedPos -= 0.2f;
+                    ActualPos = 1;
+                    for (int i = 0; i < raceController.NombreVaisseau(); i++)
+                    {
+                        int check = raceController.NombreCheckpoint(i);
+                        if (check > Checkpoint)
+                            ActualPos++;
+                        else if (check == Checkpoint)
+                        {
+                            if (DistanceIA > raceController.RemainingDistance(i))
+                                ActualPos++;
+                        }
+                    }
+                    for (int i = 0; i < raceController.NombreVaisseauHumain(); i++)
+                    {
+                        if (raceController.MyAirshipsHumain[i].tag != tag)
+                        {
+                            int check = raceController.NombreCheckpointHumain(i);
+                            if (check > Checkpoint)
+                                ActualPos++;
+                            else if (check == Checkpoint)
+                            {
+                                if (DistanceIA > raceController.RemainingDistanceHumain(i))
+                                    ActualPos++;
+                            }
+                        }
+                    }
                 }
             }
         }

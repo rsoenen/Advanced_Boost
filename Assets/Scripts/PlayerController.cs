@@ -13,11 +13,19 @@ public class PlayerController : VehicleController{
     public Text timeElapsedText;
     public Text Position;
     public Text Info;
+    public Text Classement;
+    private string pos1="";
+    private string pos2 = "";
+    private string pos3 = "";
+    private string pos4 = "";
+    private string pos5 = "";
+    private string pos6 = "";
+    private string pos7 = "";
+    private string pos8 = "";
     private GameObject BonneConduite;
     private GameObject SpeedBar;
     private GameObject TurboBar;
     private RaceController raceController;
-    private int NombreHumain = 1;
     private int NombreVaisseaux;
     private string NombreVaisseauxString;
     protected bool cp1, cp2, cp3;
@@ -40,6 +48,7 @@ public class PlayerController : VehicleController{
 
     void Start()
     {
+        Classement.text = "";
         possession = true;
         gettingtime = true;
         Info.text = "Get Ready!";
@@ -111,15 +120,15 @@ public class PlayerController : VehicleController{
                     NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
 
             }
-            if (elapsedPos > 0.2f)
+            if (elapsedPos > 0.2f && possession)
             {
                 elapsedPos -= 0.2f;
-                NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
+                NombreVaisseaux = (raceController.NombreVaisseau() + raceController.NombreVaisseauHumain());
                 NombreVaisseauxString = NombreVaisseaux.ToString();
-                for (int i = 0; i < NombreVaisseaux - 1; i++)
-                {
 
-                    ActualPos = 1;
+                ActualPos = 1;
+                for (int i = 0; i < raceController.NombreVaisseau(); i++)
+                {
                     int check = raceController.NombreCheckpoint(i);
                     if (check > MyCheckPoint)
                         ActualPos++;
@@ -128,7 +137,20 @@ public class PlayerController : VehicleController{
                         if (DistanceHumain > raceController.RemainingDistance(i))
                             ActualPos++;
                     }
-                    Debug.Log(MyCheckPoint + " " + check + " " + ActualPos + " " + DistanceHumain + " " + raceController.RemainingDistance(i));
+                }
+                for (int i = 0; i < raceController.NombreVaisseauHumain(); i++)
+                {
+                    if (raceController.MyAirshipsHumain[i].tag != tag)
+                    {
+                        int check = raceController.NombreCheckpointHumain(i);
+                        if (check > MyCheckPoint)
+                            ActualPos++;
+                        else if (check == MyCheckPoint)
+                        {
+                            if (DistanceHumain > raceController.RemainingDistanceHumain(i))
+                                ActualPos++;
+                        }
+                    }
                 }
                 Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
             }
@@ -183,6 +205,84 @@ public class PlayerController : VehicleController{
                 Forward();
 
             }
+            else
+            {
+                for (int i = 0; i < raceController.NombreVaisseau(); i++)
+                {
+                    if (raceController.PosIA(i) == 1 && NombreVaisseaux > 0)
+                    {
+                        pos1 = "1) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 2 && NombreVaisseaux > 1)
+                    {
+                        pos2 = "2) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 3 && NombreVaisseaux > 2)
+                    {
+                        pos3 = "3) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 4 && NombreVaisseaux > 3)
+                    {
+                        pos4 = "4) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 5 && NombreVaisseaux > 4)
+                    {
+                        pos5 = "5) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 6 && NombreVaisseaux > 5)
+                    {
+                        pos6 = "6) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 7 && NombreVaisseaux > 6)
+                    {
+                        pos7 = "7) " + raceController.MyAirships[i].tag;
+                    }
+                    if (raceController.PosIA(i) == 8 && NombreVaisseaux > 7)
+                    {
+                        pos8 = "8) " + raceController.MyAirships[i].tag;
+                    }
+                }
+                for (int i = 0; i < raceController.NombreVaisseauHumain(); i++)
+                {
+
+                    if (raceController.PosHumain(i) == 1 && NombreVaisseaux > 0)
+                    {
+                        pos1 = "1) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 2 && NombreVaisseaux > 1)
+                    {
+                        pos2 = "2) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 3 && NombreVaisseaux > 2)
+                    {
+                        pos3 = "3) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 4 && NombreVaisseaux > 3)
+                    {
+                        pos4 = "4) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 5 && NombreVaisseaux > 4)
+                    {
+                        pos5 = "5) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 6 && NombreVaisseaux > 5)
+                    {
+                        pos6 = "6) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 7 && NombreVaisseaux > 6)
+                    {
+                        pos7 = "7) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                    if (raceController.PosHumain(i) == 8 && NombreVaisseaux > 7)
+                    {
+                        pos8 = "8) " + raceController.MyAirshipsHumain[i].tag;
+                    }
+                }
+                Classement.text = pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
+
+
+
+           }
             #region GestionBarresHUD
             UpdateCollisionTime();
 
@@ -285,5 +385,17 @@ public class PlayerController : VehicleController{
             i++;
         }
         return lengthSoFar;
+    }
+    public int NombreCheckPoint()
+    {
+        return MyCheckPoint;
+    }
+    public float RemainingDis()
+    {
+        return DistanceHumain;
+    }
+    public int PositionHumain()
+    {
+        return ActualPos;
     }
 }
