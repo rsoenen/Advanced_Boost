@@ -83,6 +83,7 @@ public class PlayerController : VehicleController{
 
     void FixedUpdate()
     {
+
         if (GetTime() + 1.5 < Time.time && gettingtime)
         {
             Info.text = "3!";
@@ -278,7 +279,7 @@ public class PlayerController : VehicleController{
                         pos8 = "8) " + raceController.MyAirshipsHumain[i].tag;
                     }
                 }
-                Classement.text = pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
+                Classement.text = "Classement Final:\n" + pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
 
 
 
@@ -352,6 +353,15 @@ public class PlayerController : VehicleController{
                 else
                 {
                     agent.speed = 10;
+                    agent.acceleration = 3;
+                    agent.angularSpeed = 50;
+                    agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+                    agent.avoidancePriority = 50;
+                    agent.radius = 0.8428867f;
+                    agent.height = 0.3234494f;
+                    agent.baseOffset = 0.1617247f;
+                    agent.autoRepath = true;
+                    agent.autoBraking = true;
                     possession = false;
                     Info.text = "Finish! You are : " + ActualPos + "/"+NombreVaisseauxString;
                 }
