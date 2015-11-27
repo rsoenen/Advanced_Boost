@@ -7,6 +7,7 @@ public class PlayerController : VehicleController{
 
     #region Variables
     private float elapsed = 0.0f;
+    private float elapsedPos = 0.0f;
     private int MyCheckPoint;
     public Text lapText;
     public Text timeElapsedText;
@@ -44,6 +45,7 @@ public class PlayerController : VehicleController{
         Info.text = "Get Ready!";
         DistanceHumain = 0;
         elapsed = 0.0f;
+        elapsedPos = 0.0f;
         path = new NavMeshPath();
         #region InstanceNav
         index = 0;
@@ -91,7 +93,7 @@ public class PlayerController : VehicleController{
         }
         if (GetTime() + 5 < Time.time)
         {
-            if(lap==1)
+            if (lap == 1)
                 Info.text = "";
             if (gettingtime)
             {
@@ -99,38 +101,44 @@ public class PlayerController : VehicleController{
                 gettingtime = false;
             }
             elapsed += Time.deltaTime;
-            if (elapsed > 0.2f)
+            elapsedPos += Time.deltaTime;
+            if (elapsed > 0.05f)
             {
-                elapsed -= 0.2f;
+                elapsed -= 0.05f;
                 if (index > 0)
                     NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
                 else
                     NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+
             }
-            NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
-            NombreVaisseauxString = NombreVaisseaux.ToString();
-            for (int i = 0; i < NombreVaisseaux - 1; i++)
+            if (elapsedPos > 0.2f)
             {
-
-                ActualPos = 1;
-                int check = raceController.NombreCheckpoint(i);
-                if (check > MyCheckPoint)
-                    ActualPos++;
-                else if (check == MyCheckPoint)
+                elapsedPos -= 0.2f;
+                NombreVaisseaux = (raceController.NombreVaisseau() + NombreHumain);
+                NombreVaisseauxString = NombreVaisseaux.ToString();
+                for (int i = 0; i < NombreVaisseaux - 1; i++)
                 {
-                    if (DistanceHumain > raceController.RemainingDistance(i))
-                        ActualPos++;
-                }
-            }
-            Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
 
+                    ActualPos = 1;
+                    int check = raceController.NombreCheckpoint(i);
+                    if (check > MyCheckPoint)
+                        ActualPos++;
+                    else if (check == MyCheckPoint)
+                    {
+                        if (DistanceHumain > raceController.RemainingDistance(i))
+                            ActualPos++;
+                    }
+                    Debug.Log(MyCheckPoint + " " + check + " " + ActualPos + " " + DistanceHumain + " " + raceController.RemainingDistance(i));
+                }
+                Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
+            }
             #region NavUpdate
             DistanceHumain = PathLength(path);
             if (agent.remainingDistance < 5 && Time.time > Next + 1)
             {
+                moveToNextTarget();
                 MyCheckPoint++;
                 Next = Time.time;
-                moveToNextTarget();
             }
             #endregion
             #region AffichageTimeElapsed
