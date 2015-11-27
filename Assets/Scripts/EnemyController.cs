@@ -69,14 +69,14 @@ public class EnemyController : VehicleController{
             else
             {
                 elapsed += Time.deltaTime;
-                if (elapsed > 0.2f)
+                if (elapsed > 0.05f)
                 {
-                    elapsed -= 0.2f;
+                    elapsed -= 0.05f;
                     if (index > 0)
                         NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
                     else
                         NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
-                }
+               }
                 DistanceIA = PathLength(path);
                 if (agent.remainingDistance < 5)
                 {
