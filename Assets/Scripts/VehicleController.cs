@@ -11,8 +11,10 @@ public class VehicleController : MonoBehaviour {
 
     //VARIABLE TURBO ELEMENTS MC
     public string elements;
+    protected bool turboElementActif;
     protected int turboElement;
     protected const int maxTurboElement = 100;
+    protected int valeurBoost;
 
     protected float turnForce;
     protected float forwardMove;
@@ -28,6 +30,8 @@ public class VehicleController : MonoBehaviour {
         timeM = Time.time;
         distance = 0;
         turboElement = 0;
+        turboElementActif = false;
+        valeurBoost = 0;
         
     }
     public float GetTime()
@@ -52,17 +56,24 @@ public class VehicleController : MonoBehaviour {
         if (turboElement > 0)
         {
             turboElement--;
-            forwardMove = forwardMove + 2;
-
+            if (speed < maxSpeed)
+            {
+                Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 9;
+                GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
+            }            
         }
     }
 
     protected void Forward()
     {
         speed = GetComponent<Rigidbody>().velocity.magnitude;
-        if (speed < maxSpeed)
+        valeurBoost = 0;
+        if (turboElementActif){
+            valeurBoost = 2;
+        }
+        if (speed < maxSpeed + valeurBoost)
         {
-            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 100;
+            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 9;
             GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
         }
     }

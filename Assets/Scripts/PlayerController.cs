@@ -154,8 +154,12 @@ public class PlayerController : VehicleController{
             // Turbo !!!!
             if (Input.GetKey("space"))
             {
+                turboElementActif = true;
                 UseTurbo();
                 GameGUI.turboElement = (int)turboElement;
+            }
+            else{
+                turboElementActif = false;
             }
 
             TurnVehicle();
@@ -165,8 +169,8 @@ public class PlayerController : VehicleController{
             #region GestionBarresHUD
             UpdateCollisionTime();
 
-            float currentspeed = (speed / maxSpeed) * 160;
-            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / 3, 20);
+            float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
+            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed*10 , 20);
             TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 2, 20);
 
             #endregion
