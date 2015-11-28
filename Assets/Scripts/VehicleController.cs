@@ -75,12 +75,20 @@ public class VehicleController : MonoBehaviour {
         //float deltaTime=Time.time-currentTime;
         
         //currentTime = Time.time;
-        if (speed < (maxSpeed + valeurBoost))
+        if (speed < maxSpeed / 2)
         {
-            //Debug.Log("boost en cours");
-            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 100;
+            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 50;
             GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
         }
+
+        if (speed < (maxSpeed + valeurBoost +speed*0.01*Boost(Level((int)distance))))
+        {
+           
+            Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 8;
+            GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
+        }
+
+        
     }
 
     
