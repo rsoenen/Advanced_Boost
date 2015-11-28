@@ -18,7 +18,9 @@ public class gameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
        activation=false;
-       temps=0;
+
+        debutCourse();
+        temps =0;
 	}
 
     // Update is called once per frame
@@ -27,7 +29,6 @@ public class gameController : MonoBehaviour {
         if (activation){
             temps=temps+Time.deltaTime;
             if (temps>1.5){
-                debutCourse();
                 activation=false;
             }  
        } 
