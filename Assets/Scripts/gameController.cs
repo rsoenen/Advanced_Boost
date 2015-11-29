@@ -19,7 +19,7 @@ public class gameController : MonoBehaviour {
 	void Start () {
        activation=false;
 
-        debutCourse();
+        //debutCourse();
         temps =0;
 	}
 
@@ -30,6 +30,7 @@ public class gameController : MonoBehaviour {
             temps=temps+Time.deltaTime;
             if (temps>1.5){
                 activation=false;
+                debutCourse();
             }  
        } 
 
@@ -55,8 +56,8 @@ public class gameController : MonoBehaviour {
             Text info = GameObject.Find("Info").GetComponent<Text>();
             Text classement = GameObject.Find("Classement").GetComponent<Text>();
 
-
-            for (int i = 1; i < nombreVaisseau - nombreIA + 1; i++)
+            int nombreJoueur = nombreVaisseau - nombreIA;
+            for (int i = 1; i < nombreJoueur + 1; i++)
             {
                 int numberSpawn = nombreIA + i;
                 Vector3 pos = GameObject.Find("Spawn" + numberSpawn).transform.position;
@@ -67,6 +68,47 @@ public class gameController : MonoBehaviour {
                 player.GetComponent<PlayerController>().Position = position;
                 player.GetComponent<PlayerController>().Info = info;
                 player.GetComponent<PlayerController>().Classement = classement;
+                player.GetComponent<PlayerController>().numeroPlayerController = i;
+                if (nombreJoueur == 1) {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, 1f);
+                }
+                if (nombreJoueur == 2) {
+                    if (i == 1){
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, .5f);
+                    }
+                    if (i == 2) {
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, 1f, .5f);
+                    }
+                }
+                if (nombreJoueur == 3) {
+                    if (i == 1)
+                    {
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, .5f, .5f);
+                    }
+                    if (i == 2){
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, .5f, .5f, .5f);
+                    }
+                    if (i == 3){
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.25f, 0f, .5f, .5f);
+                    }
+                }
+                if (nombreJoueur == 4)
+                {
+                    if (i == 1){
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, .5f, .5f);
+                    }
+                    if (i == 2) {
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, .5f, .5f, .5f);
+                    }
+                    if (i == 3){
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, .5f, .5f);
+                    }
+                    if (i == 4){
+                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, 0f, .5f, .5f);
+                    }
+                }
+               
+
                 player.tag = "Player" + i;
                 MyAirshipsHumain.Add(player.gameObject);
             }

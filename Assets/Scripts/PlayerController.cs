@@ -37,6 +37,8 @@ public class PlayerController : VehicleController{
     float DistanceHumain;
     bool gettingtime;
     bool possession;
+
+    public int numeroPlayerController;
     #endregion
 
     #region VariableNav
@@ -186,20 +188,72 @@ public class PlayerController : VehicleController{
                 if (possession)
                 {
                     // Inputs
-                    forwardMove = Input.GetAxis("Vertical");
-                    turnForce = Input.GetAxis("Horizontal") * turnRate;
+                    //CLAVIER
+                    if (numeroPlayerController == 1) {
+                        forwardMove = Input.GetAxis("Vertical");
+                        turnForce = Input.GetAxis("Horizontal") * turnRate;
 
-                    // Turbo !!!!
-                    if (Input.GetKey("space"))
-                    {
-                        turboElementActif = true;
-                        UseTurbo();
-                        GameGUI.turboElement = (int)turboElement;
+                        // Turbo !!!!
+                        if (Input.GetKey("space"))
+                        {
+                            turboElementActif = true;
+                            UseTurbo();
+                            GameGUI.turboElement = (int)turboElement;
+                        }
+                        else
+                        {
+                            turboElementActif = false;
+                        }
                     }
-                    else
-                    {
-                        turboElementActif = false;
+                    if (numeroPlayerController == 2) {
+                        forwardMove = Input.GetAxis("Vertical2");
+                        turnForce = Input.GetAxis("Horizontal2") * turnRate;
+
+                        // Turbo !!!!
+                        if (Input.GetButton("Accelerator2")) {
+                            turboElementActif = true;
+                            UseTurbo();
+                            GameGUI.turboElement = (int)turboElement;
+                        }
+                        else
+                        {
+                            turboElementActif = false;
+                        }
                     }
+                    if (numeroPlayerController == 3) {
+                        forwardMove = Input.GetAxis("Vertical3");
+                        turnForce = Input.GetAxis("Horizontal3") * turnRate;
+
+                        // Turbo !!!!
+                        if (Input.GetButton("Accelerator3"))
+                        {
+                            turboElementActif = true;
+                            UseTurbo();
+                            GameGUI.turboElement = (int)turboElement;
+                        }
+                        else
+                        {
+                            turboElementActif = false;
+                        }
+                    }
+                    if (numeroPlayerController == 4) {
+                        forwardMove = Input.GetAxis("Vertical4");
+                        turnForce = Input.GetAxis("Horizontal4") * turnRate;
+
+                        // Turbo !!!!
+                        if (Input.GetButton("Accelerator4"))
+                        {
+                            turboElementActif = true;
+                            UseTurbo();
+                            GameGUI.turboElement = (int)turboElement;
+                        }
+                        else
+                        {
+                            turboElementActif = false;
+                        }
+                    }
+
+
 
                     TurnVehicle();
                     Forward();
