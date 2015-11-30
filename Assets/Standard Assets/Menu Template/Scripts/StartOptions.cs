@@ -75,7 +75,8 @@ public class StartOptions : MonoBehaviour {
 		//Hide the main menu UI element
 		showPanels.HideMenuMain ();
 		showPanels.HideMenuSolo ();
-		showPanels.HideMenuSelectCourse ();
+		showPanels.HideMenuSelectCourse();
+        showPanels.HideMenuSelectCourse1();
 		showPanels.HideMenuMulti ();
         showPanels.HideBackground ();
 
@@ -125,4 +126,8 @@ public class StartOptions : MonoBehaviour {
 		showPanels.HideMenuMain();
         showPanels.HideBackground();
 	}
+
+    public void setMapLoad(int mapLoad){
+        this.sceneToStart = mapLoad;
+    }
 }

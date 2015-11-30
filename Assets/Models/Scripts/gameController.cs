@@ -11,6 +11,7 @@ public class gameController : MonoBehaviour {
     public Transform airshipAlly;
     private float temps;
     bool activation;
+    private string element;
 
     public List<GameObject> MyAirships = new List<GameObject>();
     public List<GameObject> MyAirshipsHumain = new List<GameObject>();
@@ -69,6 +70,7 @@ public class gameController : MonoBehaviour {
                 player.GetComponent<PlayerController>().Info = info;
                 player.GetComponent<PlayerController>().Classement = classement;
                 player.GetComponent<PlayerController>().numeroPlayerController = i;
+                player.GetComponent<PlayerController>().elements = element;
                 if (nombreJoueur == 1) {
                     player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, 1f);
                 }
@@ -126,6 +128,9 @@ public class gameController : MonoBehaviour {
 
     public int getNombreIA() {
         return nombreIA;
+    }
+    public void setElements(string element){
+        this.element = element;
     }
 
     public void setNombreIA(int _nombreIA){

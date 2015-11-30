@@ -10,7 +10,9 @@ public class ShowPanels : MonoBehaviour {
     public GameObject menuMain;	
     public GameObject menuSolo;
 	public GameObject menuSelectCourse;
+    public GameObject menuSelectCourse1;
 	public GameObject menuMulti;
+    public GameObject menuChoixElement;
 
     public GameObject background;
 
@@ -83,6 +85,27 @@ public class ShowPanels : MonoBehaviour {
 	{
 		menuSelectCourse.SetActive (false);
 	}
+    public void ShowMenuSelectCourse1()
+    {
+        menuSelectCourse1.SetActive(true);
+    }
+    //Call this function to deactivate and hide the main menu choix circuit 1 during the main menu
+    public void HideMenuSelectCourse1()
+    {
+        menuSelectCourse1.SetActive(false);
+    }
+
+    //Call this function to deactivate and hide the main menu choix elements during the main menu
+    public void ShowMenuChoixElement()
+    {
+        menuChoixElement.SetActive(true);
+    }
+    public void HideMenuChoixElement()
+    {
+        menuChoixElement.SetActive(false);
+    }
+
+    
 
     public void ShowBackground()
     {
