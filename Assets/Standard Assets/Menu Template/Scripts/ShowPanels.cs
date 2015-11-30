@@ -13,6 +13,7 @@ public class ShowPanels : MonoBehaviour {
     public GameObject menuSelectCourse1;
 	public GameObject menuMulti;
     public GameObject menuChoixElement;
+    public GameObject menuChoixChampionnat;
 
     public GameObject background;
 
@@ -103,6 +104,15 @@ public class ShowPanels : MonoBehaviour {
     public void HideMenuChoixElement()
     {
         menuChoixElement.SetActive(false);
+    }
+    //Call this function to deactivate and hide the main menu choix championnat during the main menu
+    public void ShowMenuChoixChampionnat()
+    {
+        menuChoixChampionnat.SetActive(true);
+    }
+    public void HideMenuChoixChampionnat()
+    {
+        menuChoixChampionnat.SetActive(false);
     }
 
     

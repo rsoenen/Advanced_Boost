@@ -2,7 +2,7 @@
 
 public class Vaisseau{
 
-    private int numeroVaisseau;
+    private string tagVaisseau;
     private string element;
     private bool controlByIA;
 

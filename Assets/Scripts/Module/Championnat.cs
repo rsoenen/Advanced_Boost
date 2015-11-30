@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class Championnat {
 
     private int idChampionnat;
     private ArrayList pointChampionnat;
-    private ArrayList participants;
-    
+    private List<Vaisseau> participants;
 
-    public Championnat(ArrayList _participants, int _id){
+
+    public Championnat(List<Vaisseau> _participants, int _id)
+    {
         this.idChampionnat=_id;
         this.participants = _participants;
 

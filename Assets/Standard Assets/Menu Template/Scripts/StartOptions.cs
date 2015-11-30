@@ -78,6 +78,8 @@ public class StartOptions : MonoBehaviour {
 		showPanels.HideMenuSelectCourse();
         showPanels.HideMenuSelectCourse1();
 		showPanels.HideMenuMulti ();
+        showPanels.HideMenuChoixElement();
+        showPanels.HideMenuChoixChampionnat();
         showPanels.HideBackground ();
 
 		//Load the selected scene, by scene index number in build settings
@@ -129,5 +131,9 @@ public class StartOptions : MonoBehaviour {
 
     public void setMapLoad(int mapLoad){
         this.sceneToStart = mapLoad;
+    }
+    public int getMapLoad()
+    {
+        return sceneToStart;
     }
 }

@@ -12,9 +12,12 @@ public class gameController : MonoBehaviour {
     private float temps;
     bool activation;
     private string element;
+    private string typeCourse;
+    private Championnat championnat;
 
     public List<GameObject> MyAirships = new List<GameObject>();
     public List<GameObject> MyAirshipsHumain = new List<GameObject>();
+    public List<Vaisseau> ParticipantChampionnat = new List<Vaisseau>();
 
 	// Use this for initialization
 	void Start () {
@@ -31,12 +34,47 @@ public class gameController : MonoBehaviour {
             temps=temps+Time.deltaTime;
             if (temps>1.5){
                 activation=false;
-                debutCourse();
+                if (typeCourse == "Contre la montre")
+                {
+                    debutContreLaMontre();
+                }
+                else
+                {
+                    debutCourse();
+                    if (typeCourse == "Championnat" && championnat==null)
+                    {
+                        //championnat = new Championnat(ParticipantChampionnat, GetComponent<StartOptions>().getMapLoad());
+                    }
+                }
+               
             }  
        } 
 
     }
 
+
+    public void debutContreLaMontre() {
+        Quaternion rotate = Quaternion.Euler(0, 90, 0);
+        Track trackCircuit = GameObject.Find("Track").GetComponent<Track>();
+
+        Text position = GameObject.Find("Position").GetComponent<Text>();
+        Text tour = GameObject.Find("Tour").GetComponent<Text>();
+        Text time = GameObject.Find("Time").GetComponent<Text>();
+        Text info = GameObject.Find("Info").GetComponent<Text>();
+        Text classement = GameObject.Find("Classement").GetComponent<Text>();
+
+        Vector3 pos = GameObject.Find("Spawn1").transform.position;
+        Transform player = (Transform)Instantiate(airshipAlly, pos, rotate);
+        player.GetComponent<PlayerController>().track = trackCircuit;
+        player.GetComponent<PlayerController>().lapText = tour;
+        player.GetComponent<PlayerController>().timeElapsedText = time;
+        player.GetComponent<PlayerController>().Position = position;
+        player.GetComponent<PlayerController>().Info = info;
+        player.GetComponent<PlayerController>().Classement = classement;
+        player.GetComponent<PlayerController>().numeroPlayerController = 1;
+        player.GetComponent<PlayerController>().elements = element;
+
+    }
 
     public void debutCourse(){
             Track trackCircuit = GameObject.Find("Track").GetComponent<Track>();
@@ -173,6 +211,10 @@ public class gameController : MonoBehaviour {
     }
     public void setActivation(bool _activation){
         this.activation = _activation;
+    }
+    public void setTypeCourse(string typeCourse)
+    {
+        this.typeCourse = typeCourse;
     }
 }
 
