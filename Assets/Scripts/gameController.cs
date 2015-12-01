@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class gameController : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
-    private int nombreVaisseau=8;
-    private int nombreIA=7;
+    private int nombreVaisseau;
+    private int nombreIA;
     public Transform airshipEnemy;
     public Transform airshipAlly;
     private float temps;
@@ -15,16 +15,22 @@ public class gameController : MonoBehaviour {
     private string typeCourse;
     private Championnat championnat;
 
-    public List<GameObject> MyAirships = new List<GameObject>();
-    public List<GameObject> MyAirshipsHumain = new List<GameObject>();
-    public List<Vaisseau> ParticipantChampionnat = new List<Vaisseau>();
+    public List<GameObject> MyAirships;
+    public List<GameObject> MyAirshipsHumain;
+    public List<Vaisseau> ParticipantChampionnat;
 
 	// Use this for initialization
 	void Start () {
        activation=false;
 
         //debutCourse();
-        temps =0;
+        temps = 0;
+        nombreVaisseau = 8;
+        nombreIA = 7;
+
+        MyAirships = new List<GameObject>();
+        MyAirshipsHumain = new List<GameObject>();
+        ParticipantChampionnat = new List<Vaisseau>();
 	}
 
     // Update is called once per frame
@@ -209,12 +215,25 @@ public class gameController : MonoBehaviour {
     {
         return MyAirshipsHumain[range].GetComponent<PlayerController>().PositionHumain();
     }
-    public void setActivation(bool _activation){
-        this.activation = _activation;
+    public void setActivation(bool activation){
+        this.activation = activation;
     }
     public void setTypeCourse(string typeCourse)
     {
         this.typeCourse = typeCourse;
+    }
+
+    public void clearGameController()
+    {
+        temps = 0;
+        nombreVaisseau = 8;
+        nombreIA = 7;
+        activation = false;
+        typeCourse = "";
+
+        MyAirships = new List<GameObject>();
+        MyAirshipsHumain = new List<GameObject>();
+        ParticipantChampionnat = new List<Vaisseau>();
     }
 }
 

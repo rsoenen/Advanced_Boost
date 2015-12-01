@@ -14,7 +14,7 @@
         public Text Position;
         public Text Info;
         public Text Classement;
-        private string pos1="";
+        private string pos1 = "";
         private string pos2 = "";
         private string pos3 = "";
         private string pos4 = "";
@@ -25,7 +25,7 @@
         private GameObject BonneConduite;
         private GameObject SpeedBar;
         private GameObject TurboBar;
-        private gameController gameController;
+        private GameController gameController;
         private int NombreVaisseaux;
         private string NombreVaisseauxString;
         protected bool cp1, cp2, cp3;
@@ -51,10 +51,11 @@
 
         void Start()
         {
-            Classement.text = "";
+            Classement.enabled = false;
+            Info.enabled = false;
             possession = true;
             gettingtime = true;
-            Info.text = "Get Ready!";
+            timeElapsedText.text = "Get Ready !";
             DistanceHumain = 0;
             elapsed = 0.0f;
             elapsedPos = 0.0f;
@@ -74,7 +75,7 @@
             GameObject gameControllerObject = GameObject.FindWithTag("gameController");
             if (gameControllerObject != null)
             {
-                gameController = gameControllerObject.GetComponent<gameController>();
+                gameController = gameControllerObject.GetComponent<GameController>();
             }
             BonneConduite = GameObject.FindWithTag("BonneConduite");
             SpeedBar=GameObject.FindWithTag("Vitesse");
@@ -87,28 +88,22 @@
         void FixedUpdate()
         {
             #region Preparation
-            if (MyTime + 1.5 < Time.time && gettingtime)
+            if (MyTime + 2 < Time.time && gettingtime)
                 {
-                    Info.text = "3!";
+                    timeElapsedText.text = "3";
                 }
 
-                if (MyTime + 2.5 < Time.time && gettingtime)
+                if (MyTime + 3 < Time.time && gettingtime)
                 {
-                    Info.text = "2!";
+                    timeElapsedText.text = "2";
                 }
-                if (MyTime + 3.5 < Time.time && gettingtime)
+                if (MyTime + 4 < Time.time && gettingtime)
                 {
-                    Info.text = "1!";
-                }
-                if (MyTime + 4.5 < Time.time && gettingtime)
-                {
-                    Info.text = "Go!";
+                    timeElapsedText.text = "1";
                 }
             #endregion
             if (MyTime + 5 < Time.time)
                 {
-                if (lap == 1)
-                        Info.text = "";
                     if (gettingtime)
                     {
                         moveToNextTarget();
@@ -332,6 +327,7 @@
                                 pos8 = "8) " + gameController.MyAirshipsHumain[i].tag;
                             }
                         }
+                        Classement.enabled = true;
                         Classement.text = "Classement Final:\n" + pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
 
 
@@ -417,6 +413,7 @@
                         agent.autoRepath = true;
                         agent.autoBraking = true;
                         possession = false;
+                        Info.enabled = true;
                         Info.text = "Finish! You are : " + ActualPos + "/"+NombreVaisseauxString;
                     }
                 }

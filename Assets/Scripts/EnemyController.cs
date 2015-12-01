@@ -15,7 +15,7 @@ public class EnemyController : VehicleController{
     private float elapsedPos = 0.0f;
     private int ActualPos;
     private float MyTime;
-    private gameController gameController;
+    private GameController gameController;
     // Use this for initialization
     void Start ()
     {
@@ -34,7 +34,7 @@ public class EnemyController : VehicleController{
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null)
         {
-            gameController = gameControllerObject.GetComponent<gameController>();
+            gameController = gameControllerObject.GetComponent<GameController>();
         }
         // Définition des cibles successives
         listTarget.Add(track.checkpoint1.transform.position);

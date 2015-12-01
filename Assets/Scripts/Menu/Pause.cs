@@ -71,6 +71,20 @@ public class Pause : MonoBehaviour {
     public void ToMainMenu()
     {
         UnPause();
+
+        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+        //if (gameControllerObject != null){
+        canvas.SetActive(false);
+        //}
+
+        GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+        if (gameControllerObject != null){
+            GameController g = gameControllerObject.GetComponent<GameController>();
+            g.clearGameController();
+        }
+
+        
+
         showPanels.ShowBackground();
         showPanels.ShowMenuMain();
     }

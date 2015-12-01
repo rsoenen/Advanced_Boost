@@ -83,10 +83,11 @@ public class StartOptions : MonoBehaviour {
         showPanels.HideBackground ();
 
 		//Load the selected scene, by scene index number in build settings
-        if (Application.loadedLevel != sceneToStart)
+        Application.LoadLevel(sceneToStart);
+        /*if (Application.loadedLevel != sceneToStart)
         {
-            Application.LoadLevel(sceneToStart);
-        }
+            
+        }*/
 	}
 
 
