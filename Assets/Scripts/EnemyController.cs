@@ -14,10 +14,12 @@ public class EnemyController : VehicleController{
     bool activate = false;
     private float elapsedPos = 0.0f;
     private int ActualPos;
+    private float MyTime;
     private gameController gameController;
     // Use this for initialization
     void Start ()
     {
+        MyTime = Time.time;
         elapsedPos = 0.0f;
         ActualPos = 1;
         elapsed = 0.0f;
@@ -72,7 +74,7 @@ public class EnemyController : VehicleController{
     }
     // Update is called once per frame
     void Update () {
-        if (GetTime() + 5 < Time.time )
+        if (MyTime + 5 < Time.time )
         {
             if (!activate)
             {
@@ -117,6 +119,7 @@ public class EnemyController : VehicleController{
                         if (gameController.MyAirshipsHumain[i].tag != tag)
                         {
                             int check = gameController.NombreCheckpointHumain(i);
+                            
                             if (check > Checkpoint)
                                 ActualPos++;
                             else if (check == Checkpoint)

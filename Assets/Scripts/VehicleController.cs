@@ -140,7 +140,6 @@ public class VehicleController : MonoBehaviour {
                 turboElement += 2;
             }
         }
-        GameGUI.turboElement = (int)turboElement;
     }
 
     // Gestion des collisions

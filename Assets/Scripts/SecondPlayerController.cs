@@ -54,7 +54,6 @@ public class SecondPlayerController : VehicleController{
 		if (Input.GetButton("Accelerator"))
         {
             UseTurbo();
-            GameGUI.turboElement = (int)turboElement;
         }
 
         TurnVehicle();

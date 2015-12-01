@@ -86,6 +86,8 @@ public class ShowPanels : MonoBehaviour {
 	{
 		menuSelectCourse.SetActive (false);
 	}
+
+    //Call this function to activate and display the main menu choix circuit 1 during the main menu
     public void ShowMenuSelectCourse1()
     {
         menuSelectCourse1.SetActive(true);
@@ -114,8 +116,6 @@ public class ShowPanels : MonoBehaviour {
     {
         menuChoixChampionnat.SetActive(false);
     }
-
-    
 
     public void ShowBackground()
     {
