@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class GameController : MonoBehaviour {
 
     private int nombreVaisseau;
-    private int nombreIA;
+    public int nombreIA;
     public Transform airshipEnemy;
     public Transform airshipAlly;
     private float temps;
