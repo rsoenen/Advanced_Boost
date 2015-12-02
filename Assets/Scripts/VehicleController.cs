@@ -148,10 +148,15 @@ public class VehicleController : MonoBehaviour {
 
     void OnCollisionEnter(Collision myCollisionInfo)
     {
-        if (myCollisionInfo.gameObject.CompareTag("Mur"))
+        string tagCollision = myCollisionInfo.gameObject.tag;
+
+        if (tagCollision.Equals("Mur") || 
+            tagCollision.StartsWith("VaisseauEnnemi") ||
+            tagCollision.StartsWith("Player"))
         {
             distance = 0;
         }
+
 
     }
 

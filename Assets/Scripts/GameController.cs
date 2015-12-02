@@ -59,7 +59,6 @@ public class GameController : MonoBehaviour {
         Text position = GameObject.Find("Position").GetComponent<Text>();
         Text tour = GameObject.Find("Tour").GetComponent<Text>();
         Text time = GameObject.Find("Time").GetComponent<Text>();
-        Text info = GameObject.Find("Info").GetComponent<Text>();
         Text classement = GameObject.Find("Classement").GetComponent<Text>();
 
         Vector3 pos = GameObject.Find("Spawn1").transform.position;
@@ -68,7 +67,6 @@ public class GameController : MonoBehaviour {
         player.GetComponent<PlayerController>().lapText = tour;
         player.GetComponent<PlayerController>().timeElapsedText = time;
         player.GetComponent<PlayerController>().Position = position;
-        player.GetComponent<PlayerController>().Info = info;
         player.GetComponent<PlayerController>().Classement = classement;
         player.GetComponent<PlayerController>().numeroPlayerController = 1;
         player.GetComponent<PlayerController>().elements = element;
@@ -91,7 +89,6 @@ public class GameController : MonoBehaviour {
             Text position = GameObject.Find("Position").GetComponent<Text>();
             Text tour = GameObject.Find("Tour").GetComponent<Text>();
             Text time = GameObject.Find("Time").GetComponent<Text>();
-            Text info = GameObject.Find("Info").GetComponent<Text>();
             Text classement = GameObject.Find("Classement").GetComponent<Text>();
 
             int nombreJoueur = nombreVaisseau - nombreIA;
@@ -104,7 +101,6 @@ public class GameController : MonoBehaviour {
                 player.GetComponent<PlayerController>().lapText = tour;
                 player.GetComponent<PlayerController>().timeElapsedText = time;
                 player.GetComponent<PlayerController>().Position = position;
-                player.GetComponent<PlayerController>().Info = info;
                 player.GetComponent<PlayerController>().Classement = classement;
                 player.GetComponent<PlayerController>().numeroPlayerController = i;
                 player.GetComponent<PlayerController>().elements = element;
@@ -224,6 +220,7 @@ public class GameController : MonoBehaviour {
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();
     }
+
 }
 
 

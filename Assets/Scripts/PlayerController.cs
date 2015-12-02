@@ -12,7 +12,6 @@
         public Text lapText;
         public Text timeElapsedText;
         public Text Position;
-        public Text Info;
         public Text Classement;
         private string pos1 = "";
         private string pos2 = "";
@@ -25,6 +24,8 @@
         private GameObject BonneConduite;
         private GameObject SpeedBar;
         private GameObject TurboBar;
+        private GameObject FinishPanel;
+
         private GameController gameController;
         private int NombreVaisseaux;
         private string NombreVaisseauxString;
@@ -37,7 +38,7 @@
         private float MyTime;
         float DistanceHumain;
         bool gettingtime;
-        bool possession;
+        [HideInInspector] public bool isPlayerRunning;
 
         public int numeroPlayerController;
         #endregion
@@ -51,9 +52,10 @@
 
         void Start()
         {
-            Classement.enabled = false;
-            Info.enabled = false;
-            possession = true;
+            FinishPanel = GameObject.Find("Finish Panel");
+            FinishPanel.SetActive(false);
+
+            isPlayerRunning = true;
             gettingtime = true;
             timeElapsedText.text = "Get Ready !";
             DistanceHumain = 0;
@@ -120,7 +122,7 @@
                         else
                             NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
                     }
-                    if (elapsedPos > 0.2f && possession)
+                    if (elapsedPos > 0.2f && isPlayerRunning)
                     {
                         elapsedPos -= 0.2f;
                         NombreVaisseaux = (gameController.NombreVaisseau() + gameController.NombreVaisseauHumain());
@@ -184,7 +186,7 @@
                     if (transform.position.y < 0)
                         GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
 
-                    if (possession)
+                    if (isPlayerRunning)
                     {
                         // Inputs
                         //CLAVIER
@@ -260,35 +262,35 @@
                         {
                             if (gameController.PosIA(i) == 1 && NombreVaisseaux > 0)
                             {
-                                pos1 = "1) " + gameController.MyAirships[i].tag;
+                                pos1 = "1. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 2 && NombreVaisseaux > 1)
                             {
-                                pos2 = "2) " + gameController.MyAirships[i].tag;
+                                pos2 = "2. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 3 && NombreVaisseaux > 2)
                             {
-                                pos3 = "3) " + gameController.MyAirships[i].tag;
+                                pos3 = "3. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 4 && NombreVaisseaux > 3)
                             {
-                                pos4 = "4) " + gameController.MyAirships[i].tag;
+                                pos4 = "4. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 5 && NombreVaisseaux > 4)
                             {
-                                pos5 = "5) " + gameController.MyAirships[i].tag;
+                                pos5 = "5. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 6 && NombreVaisseaux > 5)
                             {
-                                pos6 = "6) " + gameController.MyAirships[i].tag;
+                                pos6 = "6. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 7 && NombreVaisseaux > 6)
                             {
-                                pos7 = "7) " + gameController.MyAirships[i].tag;
+                                pos7 = "7. " + gameController.MyAirships[i].tag;
                             }
                             if (gameController.PosIA(i) == 8 && NombreVaisseaux > 7)
                             {
-                                pos8 = "8) " + gameController.MyAirships[i].tag;
+                                pos8 = "8. " + gameController.MyAirships[i].tag;
                             }
                         }
                         for (int i = 0; i < gameController.NombreVaisseauHumain(); i++)
@@ -296,39 +298,40 @@
 
                             if (gameController.PosHumain(i) == 1 && NombreVaisseaux > 0)
                             {
-                                pos1 = "1) " + gameController.MyAirshipsHumain[i].tag;
+                                pos1 = "1. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 2 && NombreVaisseaux > 1)
                             {
-                                pos2 = "2) " + gameController.MyAirshipsHumain[i].tag;
+                                pos2 = "2. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 3 && NombreVaisseaux > 2)
                             {
-                                pos3 = "3) " + gameController.MyAirshipsHumain[i].tag;
+                                pos3 = "3. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 4 && NombreVaisseaux > 3)
                             {
-                                pos4 = "4) " + gameController.MyAirshipsHumain[i].tag;
+                                pos4 = "4. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 5 && NombreVaisseaux > 4)
                             {
-                                pos5 = "5) " + gameController.MyAirshipsHumain[i].tag;
+                                pos5 = "5. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 6 && NombreVaisseaux > 5)
                             {
-                                pos6 = "6) " + gameController.MyAirshipsHumain[i].tag;
+                                pos6 = "6. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 7 && NombreVaisseaux > 6)
                             {
-                                pos7 = "7) " + gameController.MyAirshipsHumain[i].tag;
+                                pos7 = "7. " + gameController.MyAirshipsHumain[i].tag;
                             }
                             if (gameController.PosHumain(i) == 8 && NombreVaisseaux > 7)
                             {
-                                pos8 = "8) " + gameController.MyAirshipsHumain[i].tag;
+                                pos8 = "8. " + gameController.MyAirshipsHumain[i].tag;
                             }
                         }
-                        Classement.enabled = true;
-                        Classement.text = "Classement Final:\n" + pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
+
+                        FinishPanel.SetActive(true);
+                        Classement.text = "Classement\n" + pos1 + "\n" + pos2 + "\n" + pos3 + "\n" + pos4 + "\n" + pos5 + "\n" + pos6 + "\n" + pos7 + "\n" + pos8 + "\n";
 
 
 
@@ -412,9 +415,7 @@
                         agent.baseOffset = 0.1617247f;
                         agent.autoRepath = true;
                         agent.autoBraking = true;
-                        possession = false;
-                        Info.enabled = true;
-                        Info.text = "Finish! You are : " + ActualPos + "/"+NombreVaisseauxString;
+                        isPlayerRunning = false;
                     }
                 }
                 cp1 = false;

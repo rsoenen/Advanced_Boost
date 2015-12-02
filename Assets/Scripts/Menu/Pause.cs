@@ -14,16 +14,23 @@ public class Pause : MonoBehaviour {
 		showPanels = GetComponent<ShowPanels> ();
 		//Get a component reference to StartButton attached to this object, store in startScript variable
 		startScript = GetComponent<StartOptions> ();
+        
 	}
 
 	// Update is called once per frame
 	void Update () {
 
+        
+
 		//Check if the Cancel button in Input Manager is down this frame (default is Escape key) and that game is not paused, and that we're not in main menu
 		if (Input.GetButtonDown ("Cancel") && !isPaused && !startScript.inMainMenu) 
 		{
-			//Call the DoPause function to pause the game
-			DoPause();
+
+            if (GameObject.FindWithTag("Player1").GetComponent<PlayerController>().isPlayerRunning)
+            {
+                DoPause();
+            }
+			
 		} 
 		//If the button is pressed and the game is paused and not in main menu
 		else if (Input.GetButtonDown ("Cancel") && isPaused && !startScript.inMainMenu) 
@@ -59,6 +66,14 @@ public class Pause : MonoBehaviour {
     public void Retry()
     {
         UnPause();
+
+        GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+        if (gameControllerObject != null)
+        {
+            GameController g = gameControllerObject.GetComponent<GameController>();
+            g.clearGameController();
+        }
+
         Application.LoadLevel(Application.loadedLevel);
     }
 
@@ -73,9 +88,7 @@ public class Pause : MonoBehaviour {
         UnPause();
 
         GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
-        //if (gameControllerObject != null){
-        canvas.SetActive(false);
-        //}
+        canvas.SetActive(false);  
 
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null){
