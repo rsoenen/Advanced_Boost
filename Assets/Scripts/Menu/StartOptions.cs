@@ -84,11 +84,17 @@ public class StartOptions : MonoBehaviour {
 
 		//Load the selected scene, by scene index number in build settings
         Application.LoadLevel(sceneToStart);
-        /*if (Application.loadedLevel != sceneToStart)
-        {
-            
-        }*/
+
+        
 	}
+
+    void OnLevelWasLoaded(int level)
+    {
+        if (level > 0)
+        {
+            GameObject.FindWithTag("gameController").GetComponent<GameController>().startCourse();
+        }
+    }
 
 
 	public void StartGameInScene()

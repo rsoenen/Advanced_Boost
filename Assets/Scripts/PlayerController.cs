@@ -155,8 +155,8 @@
                         Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
                     }
                 #endregion
-                #region NavUpdate
-                DistanceHumain = PathLength(path);
+                    #region NavUpdate
+                    DistanceHumain = PathLength(path);
                     if (agent.remainingDistance < 5 && Time.time > Next + 1 && (Time.time-MyTime) > 7)
                     {
                         moveToNextTarget();

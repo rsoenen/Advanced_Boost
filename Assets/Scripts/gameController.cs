@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour {
     public Transform airshipEnemy;
     public Transform airshipAlly;
     private float temps;
-    bool activation;
     private string element;
     private string typeCourse;
     private Championnat championnat;
@@ -21,8 +20,6 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-       activation=false;
-
         //debutCourse();
         temps = 0;
         nombreVaisseau = 8;
@@ -35,29 +32,25 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update(){
-
-        if (activation){
-            temps=temps+Time.deltaTime;
-            if (temps>1.5){
-                activation=false;
-                if (typeCourse == "Contre la montre")
-                {
-                    debutContreLaMontre();
-                }
-                else
-                {
-                    debutCourse();
-                    if (typeCourse == "Championnat" && championnat==null)
-                    {
-                        //championnat = new Championnat(ParticipantChampionnat, GetComponent<StartOptions>().getMapLoad());
-                    }
-                }
-               
-            }  
-       } 
-
     }
 
+
+    public void startCourse()
+    {
+
+        if (typeCourse == "Contre la montre")
+        {
+            debutContreLaMontre();
+        }
+        else
+        {
+            debutCourse();
+            if (typeCourse == "Championnat" && championnat == null)
+            {
+                //championnat = new Championnat(ParticipantChampionnat, GetComponent<StartOptions>().getMapLoad());
+            }
+        }
+    }
 
     public void debutContreLaMontre() {
         Quaternion rotate = Quaternion.Euler(0, 90, 0);
@@ -215,9 +208,6 @@ public class GameController : MonoBehaviour {
     {
         return MyAirshipsHumain[range].GetComponent<PlayerController>().PositionHumain();
     }
-    public void setActivation(bool activation){
-        this.activation = activation;
-    }
     public void setTypeCourse(string typeCourse)
     {
         this.typeCourse = typeCourse;
@@ -228,7 +218,6 @@ public class GameController : MonoBehaviour {
         temps = 0;
         nombreVaisseau = 8;
         nombreIA = 7;
-        activation = false;
         typeCourse = "";
 
         MyAirships = new List<GameObject>();
