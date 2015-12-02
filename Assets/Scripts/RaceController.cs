@@ -13,8 +13,8 @@ public class RaceController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        nombreia = GameObject.Find("GameControler").GetComponent<GameController>().getNombreIA();
-        nombrehumain = GameObject.Find("GameControler").GetComponent<GameController>().getNombreVaisseau() - nombreia;
+        nombreia = GameObject.Find("GameControler").GetComponent<gameController>().getNombreIA();
+        nombrehumain = GameObject.Find("GameControler").GetComponent<gameController>().getNombreVaisseau() - nombreia;
         activation = true;
     }
 	

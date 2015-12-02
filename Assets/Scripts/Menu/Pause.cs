@@ -79,7 +79,7 @@ public class Pause : MonoBehaviour {
 
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null){
-            GameController g = gameControllerObject.GetComponent<GameController>();
+            gameController g = gameControllerObject.GetComponent<gameController>();
             g.clearGameController();
         }
 

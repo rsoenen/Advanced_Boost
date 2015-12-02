@@ -25,7 +25,7 @@
         private GameObject BonneConduite;
         private GameObject SpeedBar;
         private GameObject TurboBar;
-        private GameController gameController;
+        private gameController gameController;
         private int NombreVaisseaux;
         private string NombreVaisseauxString;
         protected bool cp1, cp2, cp3;
@@ -75,7 +75,7 @@
             GameObject gameControllerObject = GameObject.FindWithTag("gameController");
             if (gameControllerObject != null)
             {
-                gameController = gameControllerObject.GetComponent<GameController>();
+                gameController = gameControllerObject.GetComponent<gameController>();
             }
             BonneConduite = GameObject.FindWithTag("BonneConduite");
             SpeedBar=GameObject.FindWithTag("Vitesse");
