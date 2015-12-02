@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
     public Transform airshipAlly;
     private float temps;
     private string element;
-    private string typeCourse;
+    public string typeCourse;
     private Championnat championnat;
 
     public List<GameObject> MyAirships;

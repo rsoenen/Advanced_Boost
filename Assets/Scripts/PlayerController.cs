@@ -8,6 +8,7 @@
             #region Variables
             private float elapsed = 0.0f;
             private float elapsedPos = 0.0f;
+            public float tempsfinal;
             private int MyCheckPoint;
             public Text lapText;
             public Text timeElapsedText;
@@ -176,6 +177,10 @@
                             timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
                         else
                             timeElapsedText.text = "Time: " + time.ToString("0:00.000");
+                        if(isPlayerRunning)
+                        {
+                            tempsfinal = Time.time - template;
+                        }
                         #endregion
                         #region AffichageCompteurTour
                         lapText.text = "Lap : " + lap + "/3";
