@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class gameController : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
     private int nombreVaisseau;
     private int nombreIA;
