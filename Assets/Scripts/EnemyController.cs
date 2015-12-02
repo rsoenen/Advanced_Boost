@@ -93,7 +93,7 @@ public class EnemyController : VehicleController{
                         NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
                 }
                 DistanceIA = PathLength(path);
-                if (agent.remainingDistance < 5 && GetTime() + 10 < Time.time)
+                if (agent.remainingDistance < 5 && (Time.time - MyTime) > 7)
                 {
                     moveToNextTarget();
                     Checkpoint++;
