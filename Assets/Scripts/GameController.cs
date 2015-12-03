@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour {
     public string element;
     public string typeCourse;
     private Championnat championnat;
-
+    public int CourseActuelDuChampionnat;
     public List<GameObject> MyAirships;
     public List<GameObject> MyAirshipsHumain;
     public List<Vaisseau> ParticipantChampionnat;
@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour {
         temps = 0;
         nombreVaisseau = 8;
         nombreIA = 7;
-
+        CourseActuelDuChampionnat = 1;
         MyAirships = new List<GameObject>();
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();
@@ -215,7 +215,7 @@ public class GameController : MonoBehaviour {
         nombreVaisseau = 8;
         nombreIA = 7;
         typeCourse = "";
-
+        CourseActuelDuChampionnat = 1;
         MyAirships = new List<GameObject>();
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();

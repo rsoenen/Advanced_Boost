@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Pause : MonoBehaviour {
 
@@ -27,11 +28,10 @@ public class Pause : MonoBehaviour {
             GameController g = gameControllerObject.GetComponent<GameController>();
             typecourse = g.typeCourse;
         }
-
         //Check if the Cancel button in Input Manager is down this frame (default is Escape key) and that game is not paused, and that we're not in main menu
-        if (Input.GetButtonDown ("Cancel") && !isPaused && !startScript.inMainMenu) 
-		{
-            if(typecourse == "Contre la montre")
+        if (Input.GetButtonDown ("Cancel") && !isPaused && !startScript.inMainMenu)
+        {
+            if (typecourse == "Contre la montre")
             {
                 if(GameObject.Find("Airship(Clone)").GetComponent<PlayerController>().isPlayerRunning)
                     DoPause();
@@ -41,8 +41,8 @@ public class Pause : MonoBehaviour {
                 if (GameObject.FindWithTag("Player1").GetComponent<PlayerController>().isPlayerRunning)
                     DoPause();
             }
-			
-		} 
+
+        }
 		//If the button is pressed and the game is paused and not in main menu
 		else if (Input.GetButtonDown ("Cancel") && isPaused && !startScript.inMainMenu) 
 		{
@@ -86,17 +86,24 @@ public class Pause : MonoBehaviour {
             GameController g = gameControllerObject.GetComponent<GameController>();
             typecourse = g.typeCourse;
             element = g.element;
-            g.clearGameController();
             if (typecourse == "Contre la montre")
             {
+                g.clearGameController();
                 g.typeCourse = typecourse;
                 g.element = element;
                 GameObject ui = GameObject.Find("UI");
                 ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel);
                 ui.GetComponent<StartOptions>().StartButtonClicked();
             }
+            else if (typecourse == "Championnat")
+            {
+
+            }
             else
-            Application.LoadLevel(Application.loadedLevel);
+            {
+                g.clearGameController();
+                Application.LoadLevel(Application.loadedLevel);
+            }
         }
     }
 

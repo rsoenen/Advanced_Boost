@@ -7,11 +7,13 @@ public class FinishPanelScript : MonoBehaviour {
     void Update()
     {
         string typecourse="";
+        int CourseActuelDuChampionnat = 1;
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null)
         {
             GameController g = gameControllerObject.GetComponent<GameController>();
             typecourse = g.typeCourse;
+            CourseActuelDuChampionnat = g.CourseActuelDuChampionnat;
         }
         if(typecourse== "Contre la montre")
         {
@@ -25,18 +27,27 @@ public class FinishPanelScript : MonoBehaviour {
             }
             classement.text = "Votre temps final est: " + minute.ToString() + ":" + tempsfinal.ToString("00.000");
         }
+        else if (typecourse == "Championnat")
+        {
+            if (CourseActuelDuChampionnat < 4)
+                GameObject.Find("RetryText").GetComponent<Text>().text = "Continuer";
+            else
+                GameObject.Find("RetryText").GetComponent<Text>().text = "Championnat fini!";
+        }
 
     }
     public void Retry()
     {
         string element = "";
         string typecourse = "";
+        int numeroCourse= 1;
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null)
         {
             GameController g = gameControllerObject.GetComponent<GameController>();
             typecourse = g.typeCourse;
             element = g.element;
+            numeroCourse = g.CourseActuelDuChampionnat;
             g.clearGameController();
             if (typecourse == "Contre la montre")
             {
@@ -45,6 +56,19 @@ public class FinishPanelScript : MonoBehaviour {
                 GameObject ui = GameObject.Find("UI");
                 ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel);
                 ui.GetComponent<StartOptions>().StartButtonClicked();
+            }
+            else if (typecourse == "Championnat")
+            {
+                g.typeCourse = typecourse;
+                g.element = element;
+                g.CourseActuelDuChampionnat = numeroCourse;
+                if (g.CourseActuelDuChampionnat < 4)
+                {
+                    g.CourseActuelDuChampionnat++;
+                    GameObject ui = GameObject.Find("UI");
+                    ui.GetComponent<StartOptions>().setMapLoad(g.CourseActuelDuChampionnat);
+                    ui.GetComponent<StartOptions>().StartButtonClicked();
+                }
             }
             else
                 Application.LoadLevel(Application.loadedLevel);
