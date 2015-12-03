@@ -20,15 +20,26 @@ public class Pause : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        
+        string typecourse = "";
+        GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+        if (gameControllerObject != null)
+        {
+            GameController g = gameControllerObject.GetComponent<GameController>();
+            typecourse = g.typeCourse;
+        }
 
-		//Check if the Cancel button in Input Manager is down this frame (default is Escape key) and that game is not paused, and that we're not in main menu
-		if (Input.GetButtonDown ("Cancel") && !isPaused && !startScript.inMainMenu) 
+        //Check if the Cancel button in Input Manager is down this frame (default is Escape key) and that game is not paused, and that we're not in main menu
+        if (Input.GetButtonDown ("Cancel") && !isPaused && !startScript.inMainMenu) 
 		{
-
-            if (GameObject.FindWithTag("Player1").GetComponent<PlayerController>().isPlayerRunning)
+            if(typecourse == "Contre la montre")
             {
-                DoPause();
+                if(GameObject.Find("Airship(Clone)").GetComponent<PlayerController>().isPlayerRunning)
+                    DoPause();
+            }
+            else 
+            {
+                if (GameObject.FindWithTag("Player1").GetComponent<PlayerController>().isPlayerRunning)
+                    DoPause();
             }
 			
 		} 
@@ -65,16 +76,28 @@ public class Pause : MonoBehaviour {
 
     public void Retry()
     {
+        string element = "";
+        string typecourse = "";
         UnPause();
 
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null)
         {
             GameController g = gameControllerObject.GetComponent<GameController>();
+            typecourse = g.typeCourse;
+            element = g.element;
             g.clearGameController();
+            if (typecourse == "Contre la montre")
+            {
+                g.typeCourse = typecourse;
+                g.element = element;
+                GameObject ui = GameObject.Find("UI");
+                ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel);
+                ui.GetComponent<StartOptions>().StartButtonClicked();
+            }
+            else
+            Application.LoadLevel(Application.loadedLevel);
         }
-
-        Application.LoadLevel(Application.loadedLevel);
     }
 
     public void Options()

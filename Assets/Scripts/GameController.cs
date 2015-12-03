@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
     public Transform airshipEnemy;
     public Transform airshipAlly;
     private float temps;
-    private string element;
+    public string element;
     public string typeCourse;
     private Championnat championnat;
 

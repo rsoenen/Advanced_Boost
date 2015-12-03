@@ -29,13 +29,26 @@ public class FinishPanelScript : MonoBehaviour {
     }
     public void Retry()
     {
+        string element = "";
+        string typecourse = "";
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null)
         {
             GameController g = gameControllerObject.GetComponent<GameController>();
+            typecourse = g.typeCourse;
+            element = g.element;
             g.clearGameController();
+            if (typecourse == "Contre la montre")
+            {
+                g.typeCourse = typecourse;
+                g.element = element;
+                GameObject ui = GameObject.Find("UI");
+                ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel);
+                ui.GetComponent<StartOptions>().StartButtonClicked();
+            }
+            else
+                Application.LoadLevel(Application.loadedLevel);
         }
-        Application.LoadLevel(Application.loadedLevel);
     }
 
     public void ToMainMenu()
