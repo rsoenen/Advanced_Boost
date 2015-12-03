@@ -20,6 +20,7 @@ public class PlayerController : VehicleController
     private GameObject TurboBar;
     private GameObject FinishPanel;
     private int[] classementInt;
+    private bool IsGettingFinalResult;
     private string[] classementString;
     private int[] classementReference;
     private GameController gameController;
@@ -51,6 +52,7 @@ public class PlayerController : VehicleController
 
     void Start()
     {
+        IsGettingFinalResult = true;
         classementFinal = "";
         classementInt = new int[8];
         classementString = new string[8];
@@ -306,20 +308,48 @@ public class PlayerController : VehicleController
 
                 }
                 IsScoreImplemented=true;
-                classementFinal = "Classement:\n";
+                if (IsGettingFinalResult)
+                {
+                    if (g.CourseActuelDuChampionnat == 4 && g.typeCourse == "Championnat")
+                        classementFinal = "Classement Final:\n";
+                    else
+                        classementFinal = "Classement:\n";
+                }
                 FinishPanel.SetActive(true);
                 incrementationClassement = 1;
                 while (incrementationClassement < 9)
                 {
+                    int MaxScore = 0;
+                    int indexMax = 0;
                     for (int i = 0; i < 8; i++)
                     {
-                        if (classementInt[i] == incrementationClassement)
+                        if (g.CourseActuelDuChampionnat < 4)
                         {
-                            if(g.typeCourse=="Championnat")
-                                classementFinal += classementInt[i] + ". " + classementString[i] + "/ Points:" +g.PointDuChampionnat[classementReference[i]] +"\n";
-                            else
-                             classementFinal += classementInt[i] + ". " + classementString[i] + "\n";
+                            if (classementInt[i] == incrementationClassement)
+                            {
+                                if (g.typeCourse == "Championnat")
+                                {
+                                    classementFinal += classementInt[i] + ". " + classementString[i] + "/ Points:" + g.PointDuChampionnat[classementReference[i]] + "\n";
+                                }
+                                else
+                                    classementFinal += classementInt[i] + ". " + classementString[i] + "\n";
+                            }
                         }
+                        else
+                        {
+                            if (g.PointDuChampionnat[i] > MaxScore)
+                            {
+                                MaxScore = g.PointDuChampionnat[i];
+                                indexMax = i;
+                            }
+                        }
+                    }
+                    if (g.typeCourse == "Championnat" && g.CourseActuelDuChampionnat == 4 && IsGettingFinalResult)
+                    {
+                        classementFinal += incrementationClassement + ". " + classementString[indexMax] + "/ Points:" + MaxScore + "\n";
+                        g.PointDuChampionnat[indexMax] = 0;
+                        if (incrementationClassement == 8)
+                            IsGettingFinalResult = false;
                     }
                     incrementationClassement++;
                 }

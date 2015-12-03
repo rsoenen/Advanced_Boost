@@ -125,4 +125,17 @@ public class ShowPanels : MonoBehaviour {
     {
         background.SetActive(false);
     }
+    public void retourMenuElement()
+    {
+        HideMenuChoixElement();
+        string typeCourse = GameObject.Find("GameControler").GetComponent<GameController>().typeCourse;
+        if (typeCourse == "Championnat")
+        {
+            ShowMenuChoixChampionnat();
+        }
+        else
+        {
+            ShowMenuSelectCourse();
+        }
+    }
 }

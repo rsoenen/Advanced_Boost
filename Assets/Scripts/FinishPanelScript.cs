@@ -89,7 +89,7 @@ public class FinishPanelScript : MonoBehaviour {
                     g.typeCourse = typecourse;
                     g.element = element;
                     GameObject ui = GameObject.Find("UI");
-                    ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel-3);
+                    Application.LoadLevel(Application.loadedLevel -3);
                     ui.GetComponent<StartOptions>().StartButtonClicked();
                 }
             }

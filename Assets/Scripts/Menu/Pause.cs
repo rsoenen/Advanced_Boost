@@ -92,8 +92,7 @@ public class Pause : MonoBehaviour {
                 g.typeCourse = typecourse;
                 g.element = element;
                 GameObject ui = GameObject.Find("UI");
-                ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel);
-                ui.GetComponent<StartOptions>().StartButtonClicked();
+                Application.LoadLevel(Application.loadedLevel);
             }
             else if (typecourse == "Championnat")
             {
@@ -102,8 +101,7 @@ public class Pause : MonoBehaviour {
                 g.typeCourse = typecourse;
                 g.element = element;
                 GameObject ui = GameObject.Find("UI");
-                ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel - g.CourseActuelDuChampionnat+1);
-                ui.GetComponent<StartOptions>().StartButtonClicked();
+                Application.LoadLevel(Application.loadedLevel- g.CourseActuelDuChampionnat+ 1);
             }
             else
             {
