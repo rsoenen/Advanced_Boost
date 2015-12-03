@@ -21,6 +21,7 @@ public class PlayerController : VehicleController
     private GameObject FinishPanel;
     private int[] classementInt;
     private string[] classementString;
+    private int[] classementReference;
     private GameController gameController;
     private int NombreVaisseaux;
     private string NombreVaisseauxString;
@@ -38,6 +39,7 @@ public class PlayerController : VehicleController
     public bool isPlayerRunning;
     private int incrementationClassement;
     public int numeroPlayerController;
+    private bool IsScoreImplemented;
     #endregion
 
     #region VariableNav
@@ -52,10 +54,11 @@ public class PlayerController : VehicleController
         classementFinal = "";
         classementInt = new int[8];
         classementString = new string[8];
+        classementReference = new int[8];
         incrementationClassement = 1;
         FinishPanel = GameObject.Find("Finish Panel");
         FinishPanel.SetActive(false);
-
+        IsScoreImplemented = false;
         isPlayerRunning = true;
         gettingtime = true;
         timeElapsedText.text = "Get Ready !";
@@ -103,6 +106,7 @@ public class PlayerController : VehicleController
         if (MyTime + 4 < Time.time && gettingtime)
         {
             timeElapsedText.text = "1";
+            IsScoreImplemented = false;
         }
         #endregion
         if (MyTime + 5 < Time.time)
@@ -259,32 +263,49 @@ public class PlayerController : VehicleController
                         turboElementActif = false;
                     }
                 }
-
-
-
                 TurnVehicle();
                 Forward();
 
             }
             else
             {
+                GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+                GameController g = gameControllerObject.GetComponent<GameController>();
                 try
                 {
                     for (int i = 0; i < gameController.nombreIA; i++)
                     {
                         classementInt[i] = gameController.PosIA(i);
                         classementString[i] = gameController.MyAirships[i].tag;
-                    }
-                    for (int i = 0; i < gameController.NombreVaisseauHumain(); i++)
-                    {
-                        classementInt[i + gameController.nombreIA] = gameController.PosHumain(i);
-                        classementString[i + gameController.nombreIA] = gameController.MyAirshipsHumain[i].tag;
+                        if(g.typeCourse== "Championnat" && !IsScoreImplemented)
+                        {
+                            g.PointDuChampionnat[i] += g.PointParPosition[gameController.PosIA(i) - 1];
+                            classementReference[i] = i ;
+                        }
                     }
                 }
                 catch (ArgumentOutOfRangeException)
                 {
 
                 }
+                try
+                {
+                    for (int i = 0; i < gameController.NombreVaisseauHumain(); i++)
+                    {
+                        classementInt[i + gameController.nombreIA] = gameController.PosHumain(i);
+                        classementString[i + gameController.nombreIA] = gameController.MyAirshipsHumain[i].tag;
+                        if (g.typeCourse == "Championnat" && i==0 && !IsScoreImplemented)
+                        {
+                            g.PointDuChampionnat[i + gameController.nombreIA] += g.PointParPosition[gameController.PosHumain(i)-1];
+                            classementReference[i + gameController.nombreIA] = i + gameController.nombreIA;
+                        }
+                    }
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+
+                }
+                IsScoreImplemented=true;
                 classementFinal = "Classement:\n";
                 FinishPanel.SetActive(true);
                 incrementationClassement = 1;
@@ -294,7 +315,10 @@ public class PlayerController : VehicleController
                     {
                         if (classementInt[i] == incrementationClassement)
                         {
-                            classementFinal += classementInt[i] + ". " + classementString[i] + "\n";
+                            if(g.typeCourse=="Championnat")
+                                classementFinal += classementInt[i] + ". " + classementString[i] + "/ Points:" +g.PointDuChampionnat[classementReference[i]] +"\n";
+                            else
+                             classementFinal += classementInt[i] + ". " + classementString[i] + "\n";
                         }
                     }
                     incrementationClassement++;

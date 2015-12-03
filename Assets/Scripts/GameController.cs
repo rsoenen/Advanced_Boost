@@ -17,10 +17,22 @@ public class GameController : MonoBehaviour {
     public List<GameObject> MyAirships;
     public List<GameObject> MyAirshipsHumain;
     public List<Vaisseau> ParticipantChampionnat;
+    public int[] PointDuChampionnat;
+    public int[] PointParPosition;
 
 	// Use this for initialization
 	void Start () {
         //debutCourse();
+        PointDuChampionnat = new int[8];
+        PointParPosition=new int[8];
+        PointParPosition[0] = 20;
+        PointParPosition[1] = 15;
+        PointParPosition[2] = 12;
+        PointParPosition[3] = 8;
+        PointParPosition[4] = 6;
+        PointParPosition[5] = 4;
+        PointParPosition[6] = 2;
+        PointParPosition[7] = 0;
         temps = 0;
         nombreVaisseau = 8;
         nombreIA = 7;
@@ -219,6 +231,10 @@ public class GameController : MonoBehaviour {
         MyAirships = new List<GameObject>();
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();
+        for(int i=0; i<8;i++)
+        {
+            PointDuChampionnat[i] = 0;
+        }
     }
 
 }

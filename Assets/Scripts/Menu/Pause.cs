@@ -98,6 +98,12 @@ public class Pause : MonoBehaviour {
             else if (typecourse == "Championnat")
             {
 
+                g.clearGameController();
+                g.typeCourse = typecourse;
+                g.element = element;
+                GameObject ui = GameObject.Find("UI");
+                ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel - g.CourseActuelDuChampionnat+1);
+                ui.GetComponent<StartOptions>().StartButtonClicked();
             }
             else
             {

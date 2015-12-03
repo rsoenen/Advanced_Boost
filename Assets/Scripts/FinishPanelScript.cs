@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class FinishPanelScript : MonoBehaviour {
+    public bool lauching = false;
     void Update()
     {
         string typecourse="";
@@ -27,12 +28,12 @@ public class FinishPanelScript : MonoBehaviour {
             }
             classement.text = "Votre temps final est: " + minute.ToString() + ":" + tempsfinal.ToString("00.000");
         }
-        else if (typecourse == "Championnat")
+        else if (typecourse == "Championnat" && !lauching)
         {
             if (CourseActuelDuChampionnat < 4)
                 GameObject.Find("RetryText").GetComponent<Text>().text = "Continuer";
             else
-                GameObject.Find("RetryText").GetComponent<Text>().text = "Championnat fini!";
+                GameObject.Find("RetryText").GetComponent<Text>().text = "Recommencer le Championnat";
         }
 
     }
@@ -41,6 +42,7 @@ public class FinishPanelScript : MonoBehaviour {
         string element = "";
         string typecourse = "";
         int numeroCourse= 1;
+        int [] PointsSave = new int[8];
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
         if (gameControllerObject != null)
         {
@@ -48,6 +50,14 @@ public class FinishPanelScript : MonoBehaviour {
             typecourse = g.typeCourse;
             element = g.element;
             numeroCourse = g.CourseActuelDuChampionnat;
+            if (g.typeCourse == "Championnat" && g.CourseActuelDuChampionnat < 4)
+            {
+                for(int i=0; i<8;i++)
+                {
+                    PointsSave[i] = g.PointDuChampionnat[i];
+                }
+            }
+
             g.clearGameController();
             if (typecourse == "Contre la montre")
             {
@@ -64,9 +74,22 @@ public class FinishPanelScript : MonoBehaviour {
                 g.CourseActuelDuChampionnat = numeroCourse;
                 if (g.CourseActuelDuChampionnat < 4)
                 {
-                    g.CourseActuelDuChampionnat++;
+                    for(int i=0; i<8;i++)
+                    {
+                        g.PointDuChampionnat[i] = PointsSave[i];
+                    }
                     GameObject ui = GameObject.Find("UI");
-                    ui.GetComponent<StartOptions>().setMapLoad(g.CourseActuelDuChampionnat);
+                    lauching = true;
+                    Application.LoadLevel(Application.loadedLevel + 1);
+                    g.CourseActuelDuChampionnat++;
+                }
+                else
+                {
+                    g.clearGameController();
+                    g.typeCourse = typecourse;
+                    g.element = element;
+                    GameObject ui = GameObject.Find("UI");
+                    ui.GetComponent<StartOptions>().setMapLoad(Application.loadedLevel-3);
                     ui.GetComponent<StartOptions>().StartButtonClicked();
                 }
             }
