@@ -45,7 +45,7 @@ public class VehicleController : MonoBehaviour {
         if (forwardMove >= 0)
         {
             transform.Rotate(0, turnForce, 0);
-            Vector3 force = new Vector3(turnForce, 0.0f, 0.0f)*acceleration*5;
+            Vector3 force = new Vector3(turnForce, 0.0f, 0.0f)*8;
             GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
         }
 
@@ -60,11 +60,11 @@ public class VehicleController : MonoBehaviour {
         //On ajoute le turbo élementaire si le joueur appuie sur espace
         if (turboElement > 0)
         {
-            turboElement--;
+            turboElement=turboElement-1;
             if (speed < maxSpeed)
             {
                 Vector3 force = new Vector3(0.0f, 0.0f, forwardMove) * acceleration * 9;
-                //GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
+                GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
             }            
         }
     }
@@ -73,8 +73,9 @@ public class VehicleController : MonoBehaviour {
     {
         speed = GetComponent<Rigidbody>().velocity.magnitude;
         valeurBoost = 0;
-        if (turboElementActif){
-            valeurBoost = 2;
+        if (turboElementActif && turboElement > 0)
+        {
+            valeurBoost = 4;
         }
         //float deltaTime=Time.time-currentTime;
         
