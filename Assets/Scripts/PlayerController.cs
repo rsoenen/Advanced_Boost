@@ -11,17 +11,17 @@ public class PlayerController : VehicleController
     private float elapsedPos = 0.0f;
     public float tempsfinal;
     private int MyCheckPoint;
-    public Text lapText;
-    public Text timeElapsedText;
-    public Text Position;
-    public Text Classement;
-    public Text BonneConduiteText;
-    public Text Info;
-    public Text Speed;
-    private GameObject BonneConduite;
-    private GameObject SpeedBar;
-    private GameObject TurboBar;
-    private GameObject FinishPanel;
+    //public Text lapText;
+    //public Text timeElapsedText;
+    //public Text Position;
+    //public Text Classement;
+    //public Text BonneConduiteText;
+    //public Text Info;
+    //public Text Speed;
+    //private GameObject BonneConduite;
+    //private GameObject SpeedBar;
+    //private GameObject TurboBar;
+    //private GameObject FinishPanel;
     private int[] classementInt;
     private bool IsGettingFinalResult;
     private bool IsImplementingColor;
@@ -54,6 +54,7 @@ public class PlayerController : VehicleController
     int index;
     #endregion
 
+    public GameObject canvas;
 
     void Start()
     {
@@ -81,9 +82,6 @@ public class PlayerController : VehicleController
         #endregion
         ActualPos = 1;
         MyCheckPoint = 0;
-        BonneConduite = GameObject.FindWithTag("BonneConduite");
-        SpeedBar = GameObject.FindWithTag("Vitesse");
-        TurboBar = GameObject.FindWithTag("Turbo");
         cp1 = false;
         cp2 = false;
         cp3 = false;
@@ -103,56 +101,55 @@ public class PlayerController : VehicleController
                 gameController = gameControllerObject.GetComponent<GameController>();
             }
 
-            if (numeroPlayerController == 1)
-            {
-                FinishPanel = GameObject.Find("Finish Panel");
-                FinishPanel.SetActive(false);
-            }
+            canvas.transform.FindChild("Finish Panel").gameObject.SetActive(false);
+
         }
-        if (IsImplementingColor && numeroPlayerController==1)
+        if (IsImplementingColor)
          {
              if (elements == "Feu")
              {
-                 TurboBar.GetComponent<Image>().color = new Color(0.97f, 0.23f, 0, 1f);
+                 canvas.transform.FindChild("TurboBar").FindChild("Bar").GetComponent<Image>().color = new Color(0.97f, 0.23f, 0, 1f);
              }
              if (elements == "Eau")
              {
-                 TurboBar.GetComponent<Image>().color = new Color(0, 0.5f, 1f, 1f);
+                 canvas.transform.FindChild("TurboBar").FindChild("Bar").GetComponent<Image>().color = new Color(0, 0.5f, 1f, 1f);
              }
              if (elements == "Tenebre")
              {
-                 TurboBar.GetComponent<Image>().color = Color.black;
+                 canvas.transform.FindChild("TurboBar").FindChild("Bar").GetComponent<Image>().color = Color.black;
              }
              if (elements == "Lumiere")
              {
-                 TurboBar.GetComponent<Image>().color = new Color(0.96f, 0.71f, 0, 1f);
+                 canvas.transform.FindChild("TurboBar").FindChild("Bar").GetComponent<Image>().color = new Color(0.96f, 0.71f, 0, 1f);
              }
+
+             canvas.transform.FindChild("TextTurbo").GetComponent<Text>().text += " : " + elements;
+
              IsImplementingColor = false;
              if (gameController.typeCourse == "Contre la montre")
-                 Position.text = "";
+                 canvas.transform.FindChild("Position").GetComponent<Text>().text = "";
 
          }
         #region Preparation
 
         if (MyTime + 2 < Time.time && gettingtime)
         {
-            Info.text = "3";
-
+            canvas.transform.FindChild("Info").GetComponent<Text>().text = "3";
         }
 
         if (MyTime + 3 < Time.time && gettingtime)
         {
-            Info.text = "2";
+            canvas.transform.FindChild("Info").GetComponent<Text>().text = "2";
         }
         if (MyTime + 4 < Time.time && gettingtime)
         {
-            Info.text = "1";
+            canvas.transform.FindChild("Info").GetComponent<Text>().text = "1";
             IsScoreImplemented = false;
         }
         #endregion
         if (MyTime + 5 < Time.time)
         {
-            Info.enabled = false;
+            canvas.transform.FindChild("Info").GetComponent<Text>().enabled = false;
             if (gettingtime)
             {
                 moveToNextTarget();
@@ -202,9 +199,9 @@ public class PlayerController : VehicleController
                     }
                 }
                 if (gameController.typeCourse != "Contre la montre")
-                    Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
+                    canvas.transform.FindChild("Position").GetComponent<Text>().text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
                 else
-                    Position.text = "";
+                    canvas.transform.FindChild("Position").GetComponent<Text>().text = "";
             }
             #endregion
             #region NavUpdate
@@ -217,7 +214,7 @@ public class PlayerController : VehicleController
             }
             #endregion
             #region AffichageCompteurTour
-            lapText.text = "Lap : " + lap + "/3";
+            canvas.transform.FindChild("Tour").GetComponent<Text>().text = "Lap : " + lap + "/3";
             #endregion
             //If Falling
             if (transform.position.y < 0)
@@ -233,9 +230,9 @@ public class PlayerController : VehicleController
                 float seconds = time % 60;
 
                 if (minute > 0)
-                    timeElapsedText.text = "Time: " + minute.ToString() + ":" + seconds.ToString("00.000");
+                    canvas.transform.FindChild("Time").GetComponent<Text>().text = "Time: " + minute.ToString() + ":" + seconds.ToString("00.000");
                 else
-                    timeElapsedText.text = "Time: " + seconds.ToString("0:00.000");
+                    canvas.transform.FindChild("Time").GetComponent<Text>().text = "Time: " + seconds.ToString("0:00.000");
 
                 if (isPlayerRunning)
                 {
@@ -243,8 +240,8 @@ public class PlayerController : VehicleController
                 }
                 #endregion
                 float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
-                SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / (maxSpeed + 4 + speed / 100 * Boost(Level((int)distance))) * 160, 20);
-                Speed.text = "Vitesse: " + (currentspeed * 49).ToString("00.0");
+                canvas.transform.FindChild("SpeedBar").FindChild("Bar").GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / (maxSpeed + 4 + speed / 100 * Boost(Level((int)distance))) * 160, 20);
+                canvas.transform.FindChild("TextSpeed").GetComponent<Text>().text = "Vitesse: " + (currentspeed * 49).ToString("00.0");
                 // Inputs
                 //CLAVIER
                 if (numeroPlayerController == 1)
@@ -361,8 +358,9 @@ public class PlayerController : VehicleController
                     else
                         classementFinal = "Classement:\n";
                 }
-                if(numeroPlayerController == 1)
-                FinishPanel.SetActive(true);
+                
+                canvas.transform.FindChild("Finish Panel").gameObject.SetActive(true);
+
                 incrementationClassement = 1;
                 while (incrementationClassement < 9)
                 {
@@ -400,11 +398,11 @@ public class PlayerController : VehicleController
                     }
                     incrementationClassement++;
                 }
-                Classement.text = classementFinal;
+                canvas.transform.FindChild("Finish Panel").FindChild("Classement").GetComponent<Text>().text = classementFinal;
             }
             #region GestionBarresHUD
             UpdateCollisionTime();
-            TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 16 / 10, 20);
+            canvas.transform.FindChild("TurboBar").FindChild("Bar").GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 16 / 10, 20);
 
             #endregion
         }
@@ -416,21 +414,21 @@ public class PlayerController : VehicleController
     {
         if (value <= 160)
         {
-            BonneConduite.GetComponent<Image>().color = Color.yellow;
-            BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value, 20);
-            BonneConduiteText.text = "Bonne Conduite Niveau 1";
+            canvas.transform.FindChild("GoodDriveBar").FindChild("Bar").GetComponent<Image>().color = Color.yellow;
+            canvas.transform.FindChild("GoodDriveBar").FindChild("Bar").GetComponent<RectTransform>().sizeDelta = new Vector2(value, 20);
+            canvas.transform.FindChild("TextBonneConduite").GetComponent<Text>().text = "Bonne Conduite Niveau 1";
         }
         if (value > 160 && value <= 320)
         {
-            BonneConduite.GetComponent<Image>().color = new Color(1f, 0.5f, 0, 1f);
-            BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 160, 20);
-            BonneConduiteText.text = "Bonne Conduite Niveau 2";
+            canvas.transform.FindChild("GoodDriveBar").FindChild("Bar").GetComponent<Image>().color = new Color(1f, 0.5f, 0, 1f);
+            canvas.transform.FindChild("GoodDriveBar").FindChild("Bar").GetComponent<RectTransform>().sizeDelta = new Vector2(value - 160, 20);
+            canvas.transform.FindChild("TextBonneConduite").GetComponent<Text>().text = "Bonne Conduite Niveau 2";
         }
         if (value > 320 && value <= 480)
         {
-            BonneConduite.GetComponent<Image>().color = Color.red;
-            BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 320, 20);
-            BonneConduiteText.text = "Bonne Conduite Niveau 3";
+            canvas.transform.FindChild("GoodDriveBar").FindChild("Bar").GetComponent<Image>().color = Color.red;
+            canvas.transform.FindChild("GoodDriveBar").FindChild("Bar").GetComponent<RectTransform>().sizeDelta = new Vector2(value - 320, 20);
+            canvas.transform.FindChild("TextBonneConduite").GetComponent<Text>().text = "Bonne Conduite Niveau 3";
         }
     }
     void UpdateCollisionTime()
