@@ -45,6 +45,7 @@ public class PlayerController : VehicleController
     private int incrementationClassement;
     public int numeroPlayerController;
     private bool IsScoreImplemented;
+    private bool IsFirstImplementation;
     #endregion
 
     #region VariableNav
@@ -56,6 +57,7 @@ public class PlayerController : VehicleController
 
     void Start()
     {
+        IsFirstImplementation = true;
         IsImplementingColor = true;
         IsGettingFinalResult = true;
         classementFinal = "";
@@ -63,19 +65,14 @@ public class PlayerController : VehicleController
         classementString = new string[8];
         classementReference = new int[8];
         incrementationClassement = 1;
-        FinishPanel = GameObject.Find("Finish Panel");
-        FinishPanel.SetActive(false);
         IsScoreImplemented = false;
         isPlayerRunning = true;
         gettingtime = true;
         DistanceHumain = 0;
         elapsed = 0.0f;
         elapsedPos = 0.0f;
-        path = new NavMeshPath();
         #region InstanceNav
         index = 0;
-        MyTime = Time.time;
-        agent = GetComponent<NavMeshAgent>();
         listTarget = new ArrayList();
         listTarget.Add(track.checkpoint1.transform.position);
         listTarget.Add(track.checkpoint2.transform.position);
@@ -84,11 +81,6 @@ public class PlayerController : VehicleController
         #endregion
         ActualPos = 1;
         MyCheckPoint = 0;
-        GameObject gameControllerObject = GameObject.FindWithTag("gameController");
-        if (gameControllerObject != null)
-        {
-            gameController = gameControllerObject.GetComponent<GameController>();
-        }
         BonneConduite = GameObject.FindWithTag("BonneConduite");
         SpeedBar = GameObject.FindWithTag("Vitesse");
         TurboBar = GameObject.FindWithTag("Turbo");
@@ -99,29 +91,47 @@ public class PlayerController : VehicleController
 
     void FixedUpdate()
     {
-        if(IsImplementingColor)
+        if (IsFirstImplementation)
         {
-            if (gameController.element == "Feu")
+            MyTime = Time.time;
+            IsFirstImplementation = false;
+            path = new NavMeshPath();
+            agent = this.GetComponent<NavMeshAgent>();
+            GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+            if (gameControllerObject != null)
             {
-                TurboBar.GetComponent<Image>().color = new Color(0.97f, 0.23f, 0, 1f);
+                gameController = gameControllerObject.GetComponent<GameController>();
             }
-            if (gameController.element == "Eau")
-            {
-                TurboBar.GetComponent<Image>().color = new Color(0, 0.5f, 1f, 1f);
-            }
-            if (gameController.element == "Tenebre")
-            {
-                TurboBar.GetComponent<Image>().color = Color.black;
-            }
-            if (gameController.element == "Lumiere")
-            {
-                TurboBar.GetComponent<Image>().color = new Color(0.96f, 0.71f, 0, 1f);
-            }
-            IsImplementingColor = false;
-            if (gameController.typeCourse == "Contre la montre")
-                Position.text = "";
 
+            if (numeroPlayerController == 1)
+            {
+                FinishPanel = GameObject.Find("Finish Panel");
+                FinishPanel.SetActive(false);
+            }
         }
+        if (IsImplementingColor && numeroPlayerController==1)
+         {
+             if (elements == "Feu")
+             {
+                 TurboBar.GetComponent<Image>().color = new Color(0.97f, 0.23f, 0, 1f);
+             }
+             if (elements == "Eau")
+             {
+                 TurboBar.GetComponent<Image>().color = new Color(0, 0.5f, 1f, 1f);
+             }
+             if (elements == "Tenebre")
+             {
+                 TurboBar.GetComponent<Image>().color = Color.black;
+             }
+             if (elements == "Lumiere")
+             {
+                 TurboBar.GetComponent<Image>().color = new Color(0.96f, 0.71f, 0, 1f);
+             }
+             IsImplementingColor = false;
+             if (gameController.typeCourse == "Contre la montre")
+                 Position.text = "";
+
+         }
         #region Preparation
 
         if (MyTime + 2 < Time.time && gettingtime)
@@ -155,9 +165,9 @@ public class PlayerController : VehicleController
             {
                 elapsed -= 0.05f;
                 if (index > 0)
-                    NavMesh.CalculatePath(transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
+                    NavMesh.CalculatePath(this.transform.position, (Vector3)listTarget[index - 1], NavMesh.AllAreas, path);
                 else
-                    NavMesh.CalculatePath(transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
+                    NavMesh.CalculatePath(this.transform.position, (Vector3)listTarget[3], NavMesh.AllAreas, path);
             }
             if (elapsedPos > 0.2f && isPlayerRunning)
             {
@@ -352,6 +362,7 @@ public class PlayerController : VehicleController
                     else
                         classementFinal = "Classement:\n";
                 }
+                if(numeroPlayerController == 1)
                 FinishPanel.SetActive(true);
                 incrementationClassement = 1;
                 while (incrementationClassement < 9)
