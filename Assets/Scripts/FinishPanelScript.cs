@@ -5,32 +5,48 @@ using System.Collections.Generic;
 
 public class FinishPanelScript : MonoBehaviour {
     public bool lauching = false;
+
     void Update()
     {
-        string typecourse="";
-        int CourseActuelDuChampionnat = 1;
+
+        string typeCourse = "";
+        int currentTrack = 1;
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
+
         if (gameControllerObject != null)
         {
             GameController g = gameControllerObject.GetComponent<GameController>();
-            typecourse = g.typeCourse;
-            CourseActuelDuChampionnat = g.CourseActuelDuChampionnat;
+            typeCourse = g.typeCourse;
+            currentTrack = g.currentTrack;
         }
-        if(typecourse== "Contre la montre")
+
+        if(typeCourse == "Contre la montre")
         {
             Text classement = GameObject.Find("Classement").GetComponent<Text>();
             float tempsfinal = GameObject.Find("Airship(Clone)").GetComponent<PlayerController>().tempsfinal;
-            int minute = 0;
-            while (tempsfinal > 60)
+
+            int minutes = (int)(tempsfinal) / 60;
+            float seconds = tempsfinal % 60;
+
+            classement.text = "Votre temps final est: " + minutes.ToString() + ":" + seconds.ToString("00.000") + "\n";
+
+            if (tempsfinal <= getSavedTime(currentTrack))
             {
-                minute++;
-                tempsfinal = tempsfinal - 60;
+                classement.text += "Nouveau record ! \n";
             }
-            classement.text = "Votre temps final est: " + minute.ToString() + ":" + tempsfinal.ToString("00.000");
+            else
+            {
+                float timeRecord = getSavedTime(currentTrack);
+                int minutesRecord = (int)(timeRecord)/60;
+                float secondsRecord = timeRecord%60;
+                classement.text += "Votre record est de : " + minutesRecord.ToString() + ":" + secondsRecord.ToString("00.000") + "\n";
+            }
+
+            saveNewTime(currentTrack, tempsfinal);
         }
-        else if (typecourse == "Championnat" && !lauching)
+        else if (typeCourse == "Championnat" && !lauching)
         {
-            if (CourseActuelDuChampionnat < 4)
+            if (currentTrack < 4)
                 GameObject.Find("RetryText").GetComponent<Text>().text = "Continuer";
             else
                 GameObject.Find("RetryText").GetComponent<Text>().text = "Recommencer";
@@ -49,8 +65,8 @@ public class FinishPanelScript : MonoBehaviour {
             GameController g = gameControllerObject.GetComponent<GameController>();
             typecourse = g.typeCourse;
             element = g.element;
-            numeroCourse = g.CourseActuelDuChampionnat;
-            if (g.typeCourse == "Championnat" && g.CourseActuelDuChampionnat < 4)
+            numeroCourse = g.currentTrack;
+            if (g.typeCourse == "Championnat" && g.currentTrack < 4)
             {
                 for(int i=0; i<8;i++)
                 {
@@ -71,8 +87,8 @@ public class FinishPanelScript : MonoBehaviour {
             {
                 g.typeCourse = typecourse;
                 g.element = element;
-                g.CourseActuelDuChampionnat = numeroCourse;
-                if (g.CourseActuelDuChampionnat < 4)
+                g.currentTrack = numeroCourse;
+                if (g.currentTrack < 4)
                 {
                     for(int i=0; i<8;i++)
                     {
@@ -81,7 +97,7 @@ public class FinishPanelScript : MonoBehaviour {
                     GameObject ui = GameObject.Find("UI");
                     lauching = true;
                     Application.LoadLevel(Application.loadedLevel + 1);
-                    g.CourseActuelDuChampionnat++;
+                    g.currentTrack++;
                 }
                 else
                 {
@@ -112,8 +128,19 @@ public class FinishPanelScript : MonoBehaviour {
 
         GameObject ui = GameObject.Find("UI");
 
+        ui.GetComponent<PlayMusic>().PlaySelectedMusic(0);
         ui.GetComponent<ShowPanels>().ShowBackground();
         ui.GetComponent<ShowPanels>().ShowMenuMain();
+        
     }
 
+    private float getSavedTime(int track)
+    {
+        return PlayerPrefs.GetFloat("CLM_Track" + track, 1000000);
+    }
+
+    private void saveNewTime(int track, float time)
+    {
+        PlayerPrefs.SetFloat("CLM_Track" + track, time);
+    }
 }

@@ -217,17 +217,16 @@ public class PlayerController : VehicleController
             {
 
                 #region AffichageTimeElapsed
-                minute = 0;
                 float time = Time.time - template;
-                while (time > 60)
-                {
-                    minute++;
-                    time = time - 60;
-                }
+
+                minute = (int)(time) / 60;
+                float seconds = time % 60;
+
                 if (minute > 0)
-                    timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
+                    timeElapsedText.text = "Time: " + minute.ToString() + ":" + seconds.ToString("00.000");
                 else
-                    timeElapsedText.text = "Time: " + time.ToString("0:00.000");
+                    timeElapsedText.text = "Time: " + seconds.ToString("0:00.000");
+
                 if (isPlayerRunning)
                 {
                     tempsfinal = Time.time - template;
@@ -347,7 +346,7 @@ public class PlayerController : VehicleController
                 IsScoreImplemented=true;
                 if (IsGettingFinalResult)
                 {
-                    if (g.CourseActuelDuChampionnat == 4 && g.typeCourse == "Championnat")
+                    if (g.currentTrack == 4 && g.typeCourse == "Championnat")
                         classementFinal = "Classement Final:\n";
                     else
                         classementFinal = "Classement:\n";
@@ -360,7 +359,7 @@ public class PlayerController : VehicleController
                     int indexMax = 0;
                     for (int i = 0; i < 8; i++)
                     {
-                        if (g.CourseActuelDuChampionnat < 4)
+                        if (g.currentTrack < 4)
                         {
                             if (classementInt[i] == incrementationClassement)
                             {
@@ -381,7 +380,7 @@ public class PlayerController : VehicleController
                             }
                         }
                     }
-                    if (g.typeCourse == "Championnat" && g.CourseActuelDuChampionnat == 4 && IsGettingFinalResult)
+                    if (g.typeCourse == "Championnat" && g.currentTrack == 4 && IsGettingFinalResult)
                     {
                         classementFinal += incrementationClassement + ". " + classementString[indexMax] + "/ Points:" + MaxScore + "\n";
                         g.PointDuChampionnat[indexMax] = 0;

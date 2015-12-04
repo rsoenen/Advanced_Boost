@@ -7,6 +7,7 @@ public class Pause : MonoBehaviour {
 	private ShowPanels showPanels;						//Reference to the ShowPanels script used to hide and show UI panels
 	private bool isPaused;								//Boolean to check if the game is paused or not
 	private StartOptions startScript;					//Reference to the StartButton script
+    private PlayMusic playMusic;
 	
 	//Awake is called before Start()
 	void Awake()
@@ -15,6 +16,8 @@ public class Pause : MonoBehaviour {
 		showPanels = GetComponent<ShowPanels> ();
 		//Get a component reference to StartButton attached to this object, store in startScript variable
 		startScript = GetComponent<StartOptions> ();
+
+        playMusic = GetComponent<PlayMusic>();
         
 	}
 
@@ -101,7 +104,7 @@ public class Pause : MonoBehaviour {
                 g.typeCourse = typecourse;
                 g.element = element;
                 GameObject ui = GameObject.Find("UI");
-                Application.LoadLevel(Application.loadedLevel- g.CourseActuelDuChampionnat+ 1);
+                Application.LoadLevel(Application.loadedLevel- g.currentTrack+ 1);
             }
             else
             {
@@ -130,7 +133,7 @@ public class Pause : MonoBehaviour {
             g.clearGameController();
         }
 
-        
+        playMusic.PlaySelectedMusic(0);
 
         showPanels.ShowBackground();
         showPanels.ShowMenuMain();
