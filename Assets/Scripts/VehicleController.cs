@@ -43,7 +43,11 @@ public class VehicleController : MonoBehaviour {
     {
         //si le joueur va vers l'avant le sens de rotation est standard
         if (forwardMove >= 0)
+        {
             transform.Rotate(0, turnForce, 0);
+            Vector3 force = new Vector3(turnForce, 0.0f, 0.0f)*acceleration*5;
+            GetComponent<Rigidbody>().AddRelativeForce(force, ForceMode.Acceleration);
+        }
 
         //s'il va en arrière, on inverse le sens
         else
