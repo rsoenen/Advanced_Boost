@@ -3,11 +3,13 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
 
     private int nombreVaisseau;
     public int nombreIA;
     public Transform airshipEnemy;
+    public Transform Vehicule1ennemy;
     public Transform airshipAlly;
     private float temps;
     public string element;
@@ -20,11 +22,12 @@ public class GameController : MonoBehaviour {
     public int[] PointDuChampionnat;
     public int[] PointParPosition;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         //debutCourse();
         PointDuChampionnat = new int[8];
-        PointParPosition=new int[8];
+        PointParPosition = new int[8];
         PointParPosition[0] = 20;
         PointParPosition[1] = 15;
         PointParPosition[2] = 12;
@@ -40,10 +43,11 @@ public class GameController : MonoBehaviour {
         MyAirships = new List<GameObject>();
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();
-	}
+    }
 
     // Update is called once per frame
-    void Update(){
+    void Update()
+    {
     }
 
 
@@ -64,7 +68,8 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void debutContreLaMontre() {
+    public void debutContreLaMontre()
+    {
         Quaternion rotate = Quaternion.Euler(0, 90, 0);
         Track trackCircuit = GameObject.Find("Track").GetComponent<Track>();
 
@@ -72,6 +77,7 @@ public class GameController : MonoBehaviour {
         Text tour = GameObject.Find("Tour").GetComponent<Text>();
         Text time = GameObject.Find("Time").GetComponent<Text>();
         Text classement = GameObject.Find("Classement").GetComponent<Text>();
+        Text bonneconduite = GameObject.Find("TextBonneConduite").GetComponent<Text>();
 
         Vector3 pos = GameObject.Find("Spawn1").transform.position;
         Transform player = (Transform)Instantiate(airshipAlly, pos, rotate);
@@ -82,106 +88,137 @@ public class GameController : MonoBehaviour {
         player.GetComponent<PlayerController>().Classement = classement;
         player.GetComponent<PlayerController>().numeroPlayerController = 1;
         player.GetComponent<PlayerController>().elements = element;
+        player.GetComponent<PlayerController>().BonneConduiteText = bonneconduite;
 
     }
 
-    public void debutCourse(){
-            Track trackCircuit = GameObject.Find("Track").GetComponent<Track>();
-            Quaternion rotate = Quaternion.Euler(0, 90, 0);
+    public void debutCourse()
+    {
+        Track trackCircuit = GameObject.Find("Track").GetComponent<Track>();
+        Quaternion rotate = Quaternion.Euler(0, 90, 0);
 
-            for (int i = 1; i < nombreIA + 1; i++)
+        for (int i = 1; i < nombreIA + 1; i++)
+        {
+            Vector3 pos = GameObject.Find("Spawn" + i).transform.position;
+            float rand = Random.value;
+            if (rand < 0.5f)
             {
-                Vector3 pos = GameObject.Find("Spawn" + i).transform.position;
                 Transform ennemy = (Transform)Instantiate(airshipEnemy, pos, rotate);
                 ennemy.GetComponent<EnemyController>().track = trackCircuit;
                 ennemy.tag = "VaisseauEnnemi" + i;
                 MyAirships.Add(ennemy.gameObject);
             }
-
-            Text position = GameObject.Find("Position").GetComponent<Text>();
-            Text tour = GameObject.Find("Tour").GetComponent<Text>();
-            Text time = GameObject.Find("Time").GetComponent<Text>();
-            Text classement = GameObject.Find("Classement").GetComponent<Text>();
-
-            int nombreJoueur = nombreVaisseau - nombreIA;
-            for (int i = 1; i < nombreJoueur + 1; i++)
+            else
             {
-                int numberSpawn = nombreIA + i;
-                Vector3 pos = GameObject.Find("Spawn" + numberSpawn).transform.position;
-                Transform player = (Transform)Instantiate(airshipAlly, pos, rotate);
-                player.GetComponent<PlayerController>().track = trackCircuit;
-                player.GetComponent<PlayerController>().lapText = tour;
-                player.GetComponent<PlayerController>().timeElapsedText = time;
-                player.GetComponent<PlayerController>().Position = position;
-                player.GetComponent<PlayerController>().Classement = classement;
-                player.GetComponent<PlayerController>().numeroPlayerController = i;
-                player.GetComponent<PlayerController>().elements = element;
-                if (nombreJoueur == 1) {
-                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, 1f);
-                }
-                if (nombreJoueur == 2) {
-                    if (i == 1){
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, .5f);
-                    }
-                    if (i == 2) {
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, 1f, .5f);
-                    }
-                }
-                if (nombreJoueur == 3) {
-                    if (i == 1)
-                    {
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, .5f, .5f);
-                    }
-                    if (i == 2){
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, .5f, .5f, .5f);
-                    }
-                    if (i == 3){
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.25f, 0f, .5f, .5f);
-                    }
-                }
-                if (nombreJoueur == 4)
-                {
-                    if (i == 1){
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, .5f, .5f);
-                    }
-                    if (i == 2) {
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, .5f, .5f, .5f);
-                    }
-                    if (i == 3){
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, .5f, .5f);
-                    }
-                    if (i == 4){
-                        player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, 0f, .5f, .5f);
-                    }
-                }
-               
+                Transform ennemy = (Transform)Instantiate(Vehicule1ennemy, pos, rotate);
+                ennemy.GetComponent<EnemyController>().track = trackCircuit;
+                ennemy.tag = "VaisseauEnnemi" + i;
+                MyAirships.Add(ennemy.gameObject);
+            }
+        }
 
-                player.tag = "Player" + i;
-                MyAirshipsHumain.Add(player.gameObject);
+        Text position = GameObject.Find("Position").GetComponent<Text>();
+        Text tour = GameObject.Find("Tour").GetComponent<Text>();
+        Text time = GameObject.Find("Time").GetComponent<Text>();
+        Text classement = GameObject.Find("Classement").GetComponent<Text>();
+        Text bonneconduite = GameObject.Find("TextBonneConduite").GetComponent<Text>();
+
+        int nombreJoueur = nombreVaisseau - nombreIA;
+        for (int i = 1; i < nombreJoueur + 1; i++)
+        {
+            int numberSpawn = nombreIA + i;
+            Vector3 pos = GameObject.Find("Spawn" + numberSpawn).transform.position;
+            Transform player = (Transform)Instantiate(airshipAlly, pos, rotate);
+            player.GetComponent<PlayerController>().track = trackCircuit;
+            player.GetComponent<PlayerController>().lapText = tour;
+            player.GetComponent<PlayerController>().timeElapsedText = time;
+            player.GetComponent<PlayerController>().Position = position;
+            player.GetComponent<PlayerController>().Classement = classement;
+            player.GetComponent<PlayerController>().numeroPlayerController = i;
+            player.GetComponent<PlayerController>().elements = element;
+            player.GetComponent<PlayerController>().BonneConduiteText = bonneconduite;
+            if (nombreJoueur == 1)
+            {
+                player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, 1f);
+            }
+            if (nombreJoueur == 2)
+            {
+                if (i == 1)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, .5f);
+                }
+                if (i == 2)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, 1f, .5f);
+                }
+            }
+            if (nombreJoueur == 3)
+            {
+                if (i == 1)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, .5f, .5f);
+                }
+                if (i == 2)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, .5f, .5f, .5f);
+                }
+                if (i == 3)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.25f, 0f, .5f, .5f);
+                }
+            }
+            if (nombreJoueur == 4)
+            {
+                if (i == 1)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, .5f, .5f, .5f);
+                }
+                if (i == 2)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, .5f, .5f, .5f);
+                }
+                if (i == 3)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, .5f, .5f);
+                }
+                if (i == 4)
+                {
+                    player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(.5f, 0f, .5f, .5f);
+                }
             }
 
-   
+
+            player.tag = "Player" + i;
+            MyAirshipsHumain.Add(player.gameObject);
+        }
+
+
     }
 
-    public int getNombreVaisseau(){
+    public int getNombreVaisseau()
+    {
         return nombreVaisseau;
     }
 
-    public void setNombreVaisseau(int _nombreVaisseau){
-        this.nombreVaisseau=_nombreVaisseau;
+    public void setNombreVaisseau(int _nombreVaisseau)
+    {
+        this.nombreVaisseau = _nombreVaisseau;
     }
 
-    public int getNombreIA() {
+    public int getNombreIA()
+    {
         return nombreIA;
     }
-    public void setElements(string element){
+    public void setElements(string element)
+    {
         this.element = element;
     }
 
-    public void setNombreIA(int _nombreIA){
+    public void setNombreIA(int _nombreIA)
+    {
         this.nombreIA = _nombreIA;
     }
-    
+
     public int NombreVaisseau()
     {
         return MyAirships.Count;
@@ -231,7 +268,7 @@ public class GameController : MonoBehaviour {
         MyAirships = new List<GameObject>();
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();
-        for(int i=0; i<8;i++)
+        for (int i = 0; i < 8; i++)
         {
             PointDuChampionnat[i] = 0;
         }

@@ -15,12 +15,14 @@ public class PlayerController : VehicleController
     public Text timeElapsedText;
     public Text Position;
     public Text Classement;
+    public Text BonneConduiteText;
     private GameObject BonneConduite;
     private GameObject SpeedBar;
     private GameObject TurboBar;
     private GameObject FinishPanel;
     private int[] classementInt;
     private bool IsGettingFinalResult;
+    private bool IsImplementingColor;
     private string[] classementString;
     private int[] classementReference;
     private GameController gameController;
@@ -52,6 +54,7 @@ public class PlayerController : VehicleController
 
     void Start()
     {
+        IsImplementingColor = true;
         IsGettingFinalResult = true;
         classementFinal = "";
         classementInt = new int[8];
@@ -95,10 +98,35 @@ public class PlayerController : VehicleController
 
     void FixedUpdate()
     {
+        if(IsImplementingColor)
+        {
+            if (gameController.element == "Feu")
+            {
+                TurboBar.GetComponent<Image>().color = new Color(0.97f, 0.23f, 0, 1f);
+            }
+            if (gameController.element == "Eau")
+            {
+                TurboBar.GetComponent<Image>().color = new Color(0, 0.5f, 1f, 1f);
+            }
+            if (gameController.element == "Tenebre")
+            {
+                TurboBar.GetComponent<Image>().color = Color.black;
+            }
+            if (gameController.element == "Lumiere")
+            {
+                TurboBar.GetComponent<Image>().color = new Color(0.96f, 0.71f, 0, 1f);
+            }
+            IsImplementingColor = false;
+            if (gameController.typeCourse == "Contre la montre")
+                Position.text = "";
+
+        }
         #region Preparation
+
         if (MyTime + 2 < Time.time && gettingtime)
         {
             timeElapsedText.text = "3";
+
         }
 
         if (MyTime + 3 < Time.time && gettingtime)
@@ -161,7 +189,10 @@ public class PlayerController : VehicleController
                         }
                     }
                 }
-                Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
+                if (gameController.typeCourse != "Contre la montre")
+                    Position.text = "Position: " + ActualPos + "/" + NombreVaisseauxString;
+                else
+                    Position.text = "";
             }
             #endregion
             #region NavUpdate
@@ -373,16 +404,19 @@ public class PlayerController : VehicleController
         {
             BonneConduite.GetComponent<Image>().color = Color.yellow;
             BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value, 20);
+            BonneConduiteText.text = "Bonne Conduite Niveau 1";
         }
         if (value > 160 && value <= 320)
         {
             BonneConduite.GetComponent<Image>().color = new Color(1f, 0.5f, 0, 1f);
             BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 160, 20);
+            BonneConduiteText.text = "Bonne Conduite Niveau 2";
         }
         if (value > 320 && value <= 480)
         {
             BonneConduite.GetComponent<Image>().color = Color.red;
             BonneConduite.GetComponent<RectTransform>().sizeDelta = new Vector2(value - 320, 20);
+            BonneConduiteText.text = "Bonne Conduite Niveau 3";
         }
     }
     void UpdateCollisionTime()
