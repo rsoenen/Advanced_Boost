@@ -16,6 +16,8 @@ public class PlayerController : VehicleController
     public Text Position;
     public Text Classement;
     public Text BonneConduiteText;
+    public Text Info;
+    public Text Speed;
     private GameObject BonneConduite;
     private GameObject SpeedBar;
     private GameObject TurboBar;
@@ -66,7 +68,6 @@ public class PlayerController : VehicleController
         IsScoreImplemented = false;
         isPlayerRunning = true;
         gettingtime = true;
-        timeElapsedText.text = "Get Ready !";
         DistanceHumain = 0;
         elapsed = 0.0f;
         elapsedPos = 0.0f;
@@ -125,22 +126,23 @@ public class PlayerController : VehicleController
 
         if (MyTime + 2 < Time.time && gettingtime)
         {
-            timeElapsedText.text = "3";
+            Info.text = "3";
 
         }
 
         if (MyTime + 3 < Time.time && gettingtime)
         {
-            timeElapsedText.text = "2";
+            Info.text = "2";
         }
         if (MyTime + 4 < Time.time && gettingtime)
         {
-            timeElapsedText.text = "1";
+            Info.text = "1";
             IsScoreImplemented = false;
         }
         #endregion
         if (MyTime + 5 < Time.time)
         {
+            Info.enabled = false;
             if (gettingtime)
             {
                 moveToNextTarget();
@@ -389,8 +391,9 @@ public class PlayerController : VehicleController
             #region GestionBarresHUD
             UpdateCollisionTime();
             float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
-            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed * 10, 20);
+            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / (maxSpeed + valeurBoost + speed /100 * Boost(Level((int)distance))) *160, 20);
             TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 16 / 10, 20);
+            Speed.text = "Vitesse: " + (currentspeed*49).ToString("00.0");
 
             #endregion
         }

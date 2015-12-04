@@ -78,6 +78,8 @@ public class GameController : MonoBehaviour
         Text time = GameObject.Find("Time").GetComponent<Text>();
         Text classement = GameObject.Find("Classement").GetComponent<Text>();
         Text bonneconduite = GameObject.Find("TextBonneConduite").GetComponent<Text>();
+        Text Info = GameObject.Find("Info").GetComponent<Text>();
+        Text TextSpeed = GameObject.Find("TextSpeed").GetComponent<Text>();
 
         Vector3 pos = GameObject.Find("Spawn1").transform.position;
         Transform player = (Transform)Instantiate(airshipAlly, pos, rotate);
@@ -89,6 +91,8 @@ public class GameController : MonoBehaviour
         player.GetComponent<PlayerController>().numeroPlayerController = 1;
         player.GetComponent<PlayerController>().elements = element;
         player.GetComponent<PlayerController>().BonneConduiteText = bonneconduite;
+        player.GetComponent<PlayerController>().Info = Info;
+        player.GetComponent<PlayerController>().Speed = TextSpeed;
 
     }
 
@@ -122,6 +126,8 @@ public class GameController : MonoBehaviour
         Text time = GameObject.Find("Time").GetComponent<Text>();
         Text classement = GameObject.Find("Classement").GetComponent<Text>();
         Text bonneconduite = GameObject.Find("TextBonneConduite").GetComponent<Text>();
+        Text Info = GameObject.Find("Info").GetComponent<Text>();
+        Text TextSpeed = GameObject.Find("TextSpeed").GetComponent<Text>();
 
         int nombreJoueur = nombreVaisseau - nombreIA;
         for (int i = 1; i < nombreJoueur + 1; i++)
@@ -137,6 +143,8 @@ public class GameController : MonoBehaviour
             player.GetComponent<PlayerController>().numeroPlayerController = i;
             player.GetComponent<PlayerController>().elements = element;
             player.GetComponent<PlayerController>().BonneConduiteText = bonneconduite;
+            player.GetComponent<PlayerController>().Info = Info;
+            player.GetComponent<PlayerController>().Speed = TextSpeed;
             if (nombreJoueur == 1)
             {
                 player.Find("MainCamera").GetComponent<Camera>().rect = new Rect(0f, 0f, 1f, 1f);

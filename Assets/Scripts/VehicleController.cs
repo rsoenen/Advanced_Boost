@@ -164,13 +164,13 @@ public class VehicleController : MonoBehaviour {
     {
         if (val < 0)
             return -1;
-        else if (val >= 0 && val < 100)
+        else if (val >= 0 && val < 160)
             return 0;
-        else if (val >= 100 && val < 300)
+        else if (val >= 160 && val < 320)
             return 1;
-        else if (val >= 300 && val < 700)
+        else if (val >= 320 && val < 480)
             return 2;
-        else if (val >= 700)
+        else if (val >= 480)
             return 3;
         else
             return -1;
