@@ -206,23 +206,6 @@ public class PlayerController : VehicleController
                 Next = Time.time;
             }
             #endregion
-            #region AffichageTimeElapsed
-            minute = 0;
-            float time = Time.time - template;
-            while (time > 60)
-            {
-                minute++;
-                time = time - 60;
-            }
-            if (minute > 0)
-                timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
-            else
-                timeElapsedText.text = "Time: " + time.ToString("0:00.000");
-            if (isPlayerRunning)
-            {
-                tempsfinal = Time.time - template;
-            }
-            #endregion
             #region AffichageCompteurTour
             lapText.text = "Lap : " + lap + "/3";
             #endregion
@@ -232,6 +215,27 @@ public class PlayerController : VehicleController
 
             if (isPlayerRunning)
             {
+
+                #region AffichageTimeElapsed
+                minute = 0;
+                float time = Time.time - template;
+                while (time > 60)
+                {
+                    minute++;
+                    time = time - 60;
+                }
+                if (minute > 0)
+                    timeElapsedText.text = "Time: " + minute.ToString() + ":" + time.ToString("00.000");
+                else
+                    timeElapsedText.text = "Time: " + time.ToString("0:00.000");
+                if (isPlayerRunning)
+                {
+                    tempsfinal = Time.time - template;
+                }
+                #endregion
+                float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
+                SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / (maxSpeed + 4 + speed / 100 * Boost(Level((int)distance))) * 160, 20);
+                Speed.text = "Vitesse: " + (currentspeed * 49).ToString("00.0");
                 // Inputs
                 //CLAVIER
                 if (numeroPlayerController == 1)
@@ -390,10 +394,7 @@ public class PlayerController : VehicleController
             }
             #region GestionBarresHUD
             UpdateCollisionTime();
-            float currentspeed = GetComponent<Rigidbody>().velocity.magnitude;
-            SpeedBar.GetComponent<RectTransform>().sizeDelta = new Vector2(currentspeed / (maxSpeed + valeurBoost + speed /100 * Boost(Level((int)distance))) *160, 20);
             TurboBar.GetComponent<RectTransform>().sizeDelta = new Vector2(turboElement * 16 / 10, 20);
-            Speed.text = "Vitesse: " + (currentspeed*49).ToString("00.0");
 
             #endregion
         }

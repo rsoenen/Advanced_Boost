@@ -33,7 +33,7 @@ public class FinishPanelScript : MonoBehaviour {
             if (CourseActuelDuChampionnat < 4)
                 GameObject.Find("RetryText").GetComponent<Text>().text = "Continuer";
             else
-                GameObject.Find("RetryText").GetComponent<Text>().text = "Recommencer le Championnat";
+                GameObject.Find("RetryText").GetComponent<Text>().text = "Recommencer";
         }
 
     }
