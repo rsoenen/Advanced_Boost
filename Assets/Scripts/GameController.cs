@@ -296,11 +296,11 @@ public class GameController : MonoBehaviour
 
                 if (i == 1)
                 {
-                    return new Rect(0f, 0f, 1f, .5f);
+                    return new Rect(0f, .5f, 1f, .5f);
                 }
                 if (i == 2)
                 {
-                    return new Rect(0f, .5f, 1f, .5f);
+                    return new Rect(0f, 0f, 1f, .5f);
                 }
 
                 break;
