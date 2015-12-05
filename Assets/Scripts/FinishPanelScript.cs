@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class FinishPanelScript : MonoBehaviour {
     public bool lauching = false;
+    private bool IsSavingRecord = true;
 
     void Update()
     {
@@ -19,8 +20,9 @@ public class FinishPanelScript : MonoBehaviour {
             typeCourse = g.typeCourse;
             currentTrack = g.currentTrack;
         }
+        bool save = GameObject.Find("Airship(Clone)").GetComponent<PlayerController>().isPlayerRunning;
 
-        if(typeCourse == "Contre la montre")
+        if (typeCourse == "Contre la montre" && !save && IsSavingRecord)
         {
             Text classement = GameObject.Find("Classement").GetComponent<Text>();
             float tempsfinal = GameObject.Find("Airship(Clone)").GetComponent<PlayerController>().tempsfinal;
@@ -29,10 +31,11 @@ public class FinishPanelScript : MonoBehaviour {
             float seconds = tempsfinal % 60;
 
             classement.text = "Votre temps final est: " + minutes.ToString() + ":" + seconds.ToString("00.000") + "\n";
-
-            if (tempsfinal <= getSavedTime(currentTrack))
+            if (tempsfinal <= getSavedTime(currentTrack) )
             {
                 classement.text += "Nouveau record ! \n";
+                saveNewTime(currentTrack, tempsfinal);
+                IsSavingRecord = false;
             }
             else
             {
@@ -42,7 +45,6 @@ public class FinishPanelScript : MonoBehaviour {
                 classement.text += "Votre record est de : " + minutesRecord.ToString() + ":" + secondsRecord.ToString("00.000") + "\n";
             }
 
-            saveNewTime(currentTrack, tempsfinal);
         }
         else if (typeCourse == "Championnat" && !lauching)
         {
