@@ -81,6 +81,7 @@ public class Pause : MonoBehaviour {
     {
         string element = "";
         string typecourse = "";
+        int nombreia = 7;
         UnPause();
 
         GameObject gameControllerObject = GameObject.FindWithTag("gameController");
@@ -89,6 +90,7 @@ public class Pause : MonoBehaviour {
             GameController g = gameControllerObject.GetComponent<GameController>();
             typecourse = g.typeCourse;
             element = g.element;
+            nombreia = g.nombreIA;
             if (typecourse == "Contre la montre")
             {
                 g.clearGameController();
@@ -109,6 +111,9 @@ public class Pause : MonoBehaviour {
             else
             {
                 g.clearGameController();
+                g.nombreIA = nombreia;
+                g.element = element;
+                g.typeCourse = typecourse;
                 Application.LoadLevel(Application.loadedLevel);
             }
         }
