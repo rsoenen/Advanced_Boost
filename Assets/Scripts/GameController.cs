@@ -167,17 +167,6 @@ public class GameController : MonoBehaviour
 
         #endregion
 
-        /*Text position = GameObject.Find("Position").GetComponent<Text>();
-        Text tour = GameObject.Find("Tour").GetComponent<Text>();
-        Text time = GameObject.Find("Time").GetComponent<Text>();
-        Text classement = GameObject.Find("Classement").GetComponent<Text>();
-        Text bonneconduite = GameObject.Find("TextBonneConduite").GetComponent<Text>();
-        Text Info = GameObject.Find("Info").GetComponent<Text>();
-        Text TextSpeed = GameObject.Find("TextSpeed").GetComponent<Text>();*/
-
-
-        
-        
         for (int i = 1; i < nombreJoueur + 1; i++)
         {
             int numberSpawn = nombreIA + i;
@@ -186,14 +175,6 @@ public class GameController : MonoBehaviour
             player.GetComponent<PlayerController>().track = trackCircuit;
             player.GetComponent<PlayerController>().numeroPlayerController = i;
             player.GetComponent<PlayerController>().elements = element;
-
-            /*player.GetComponent<PlayerController>().lapText = tour;
-            player.GetComponent<PlayerController>().timeElapsedText = time;
-            player.GetComponent<PlayerController>().Position = position;
-            player.GetComponent<PlayerController>().Classement = classement;
-            player.GetComponent<PlayerController>().BonneConduiteText = bonneconduite;
-            player.GetComponent<PlayerController>().Info = Info;
-            player.GetComponent<PlayerController>().Speed = TextSpeed;*/
 
             player.GetComponent<PlayerController>().canvas = GameObject.Find("Joueur"+i);
             player.Find("MainCamera").GetComponent<Camera>().rect = getCamera(nombreJoueur, i);
