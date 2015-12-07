@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour
     void Start()
     {
         //debutCourse();
+       
+
         PointDuChampionnat = new int[8];
         PointParPosition = new int[8];
         PointParPosition[0] = 20;
@@ -37,9 +39,7 @@ public class GameController : MonoBehaviour
         PointParPosition[6] = 2;
         PointParPosition[7] = 0;
         temps = 0;
-        nombreVaisseau = 8;
-        nombreIA = 7;
-        currentTrack = 1;
+        currentTrack = 0;
         MyAirships = new List<GameObject>();
         MyAirshipsHumain = new List<GameObject>();
         ParticipantChampionnat = new List<Vaisseau>();
@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
 
     public void startCourse()
     {
-
+        currentTrack = GameObject.Find("UI").GetComponent<StartOptions>().getMapLoad();
         if (typeCourse == "Contre la montre")
         {
             debutContreLaMontre();

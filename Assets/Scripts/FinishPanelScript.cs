@@ -7,6 +7,14 @@ public class FinishPanelScript : MonoBehaviour {
     public bool lauching = false;
     private bool IsSavingRecord = true;
 
+    void Start()
+    {
+        Debug.Log(getSavedTime(1));
+        Debug.Log(getSavedTime(2));
+        Debug.Log(getSavedTime(3));
+        Debug.Log(getSavedTime(4));
+    }
+
     void Update()
     {
 
@@ -29,13 +37,14 @@ public class FinishPanelScript : MonoBehaviour {
 
             int minutes = (int)(tempsfinal) / 60;
             float seconds = tempsfinal % 60;
+            
 
             classement.text = "Votre temps final est: " + minutes.ToString() + ":" + seconds.ToString("00.000") + "\n";
             if (tempsfinal <= getSavedTime(currentTrack) )
             {
                 classement.text += "Nouveau record ! \n";
                 saveNewTime(currentTrack, tempsfinal);
-                IsSavingRecord = false;
+                //IsSavingRecord = false;
             }
             else
             {
