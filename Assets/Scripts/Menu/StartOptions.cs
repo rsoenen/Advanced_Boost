@@ -80,6 +80,7 @@ public class StartOptions : MonoBehaviour {
 		showPanels.HideMenuMulti ();
         showPanels.HideMenuChoixElement();
         showPanels.HideMenuChoixChampionnat();
+        showPanels.HideMenuPalmares();
         showPanels.HideBackground ();
 
 		//Load the selected scene, by scene index number in build settings
@@ -119,7 +120,6 @@ public class StartOptions : MonoBehaviour {
 
 
 	}
-
 
 	public void PlayNewMusic()
 	{

@@ -14,6 +14,7 @@ public class ShowPanels : MonoBehaviour {
 	public GameObject menuMulti;
     public GameObject menuChoixElement;
     public GameObject menuChoixChampionnat;
+    public GameObject menuPalmares;
 
     public GameObject background;
 
@@ -116,6 +117,34 @@ public class ShowPanels : MonoBehaviour {
     {
         menuChoixChampionnat.SetActive(false);
     }
+    //Call this function to deactivate and hide the  menu palmares during the main menu
+    
+    public void ShowMenuPalmares()
+    {
+        menuPalmares.SetActive(true);
+            for (int i = 1; i < 9; i++)
+            {
+                Text circuit = GameObject.Find("Circuit" + i).GetComponent<Text>();
+                float timeRecord = getSavedTime(i);
+                if (timeRecord < 1000)
+                {
+                    int minutesRecord = (int)(timeRecord) / 60;
+                    float secondsRecord = timeRecord % 60;
+                    circuit.text = "Circuit " + i + ":  " + minutesRecord.ToString() + ":" + secondsRecord.ToString("00.000");
+                }
+                else
+                {
+                    circuit.text = "Circuit " + i + " :  9:99.999";
+                }
+            
+        }
+       
+       
+    }
+    public void HideMenuPalmares()
+    {
+        menuPalmares.SetActive(false);
+    }
 
     public void ShowBackground()
     {
@@ -137,5 +166,10 @@ public class ShowPanels : MonoBehaviour {
         {
             ShowMenuSelectCourse();
         }
+    }
+
+    private float getSavedTime(int track)
+    {
+        return PlayerPrefs.GetFloat("CLM_Track" + track, 1000000);
     }
 }

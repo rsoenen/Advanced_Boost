@@ -7,14 +7,6 @@ public class FinishPanelScript : MonoBehaviour {
     public bool lauching = false;
     private bool IsSavingRecord = true;
 
-    void Start()
-    {
-        Debug.Log(getSavedTime(1));
-        Debug.Log(getSavedTime(2));
-        Debug.Log(getSavedTime(3));
-        Debug.Log(getSavedTime(4));
-    }
-
     void Update()
     {
 
